@@ -22,11 +22,15 @@ export default function AntiCheatIDE() {
     useInvite();
   const {
     sessionInfo,
+    problems,
+    currentProblemId,
+    selectProblem,
     problem,
     selectedLanguage,
     code,
     setCode,
     selectLanguage,
+    refreshProblems,
   } = useSession(sessionId, addAlert);
   const { transport, editorRevision, handleEditorDidMount, flush } =
     useEventCapture(sessionId);
@@ -80,12 +84,30 @@ export default function AntiCheatIDE() {
             ? "제출은 저장됐지만 채점 서비스 호출에 실패했습니다."
             : "제출이 저장됐고 채점을 기다리고 있습니다.",
       );
+
+      // 해금 상태 갱신 후, 다음 문제가 열렸으면 자동 이동
+      const updated = await refreshProblems();
+      const index = updated.findIndex((item) => item.id === problem.id);
+      const next = updated[index + 1];
+      if (next && next.status !== "locked") {
+        selectProblem(next.id);
+        addAlert("다음 문제가 해금되었습니다.");
+      }
     } catch (error) {
       addAlert(error instanceof Error ? error.message : "제출에 실패했습니다.");
     } finally {
       setSubmitting(false);
     }
-  }, [addAlert, code, flush, problem, selectedLanguage, sessionId]);
+  }, [
+    addAlert,
+    code,
+    flush,
+    problem,
+    refreshProblems,
+    selectProblem,
+    selectedLanguage,
+    sessionId,
+  ]);
 
   if (!sessionId) {
     return (
@@ -115,6 +137,9 @@ export default function AntiCheatIDE() {
 
       <div className="flex flex-1 overflow-hidden">
         <ProblemSidebar
+          problems={problems}
+          currentProblemId={currentProblemId}
+          onSelectProblem={selectProblem}
           problem={problem}
           selectedLanguage={selectedLanguage}
           onSelectLanguage={selectLanguage}

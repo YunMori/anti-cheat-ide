@@ -4,11 +4,16 @@ import { LANGUAGE_LABELS } from "../lib/constants";
 import type { TransportState } from "../lib/session-event-client";
 import type {
   CandidateProblem,
+  CandidateProblemSummary,
   SubmissionAccepted,
   SupportedLanguage,
 } from "../lib/types";
+import { ProblemList } from "./ProblemList";
 
 interface ProblemSidebarProps {
+  problems: CandidateProblemSummary[];
+  currentProblemId: string;
+  onSelectProblem: (problemId: string) => void;
   problem: CandidateProblem | null;
   selectedLanguage: SupportedLanguage;
   onSelectLanguage: (language: SupportedLanguage) => void;
@@ -17,6 +22,9 @@ interface ProblemSidebarProps {
 }
 
 export function ProblemSidebar({
+  problems,
+  currentProblemId,
+  onSelectProblem,
   problem,
   selectedLanguage,
   onSelectLanguage,
@@ -25,6 +33,12 @@ export function ProblemSidebar({
 }: ProblemSidebarProps) {
   return (
     <aside className="custom-scrollbar w-80 overflow-y-auto border-r border-gray-700 bg-gray-800 p-6">
+      <ProblemList
+        problems={problems}
+        currentProblemId={currentProblemId}
+        onSelect={onSelectProblem}
+      />
+
       <div className="mb-6">
         <span className="rounded bg-cyan-900 px-2 py-1 text-[10px] font-bold text-cyan-300">
           LEVEL 2
