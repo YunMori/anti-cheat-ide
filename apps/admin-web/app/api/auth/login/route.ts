@@ -1,11 +1,14 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-const PLATFORM_API_URL =
-  process.env.NEXT_PUBLIC_PLATFORM_API_URL ?? "http://localhost:8001";
+import {
+  ADMIN_TOKEN_COOKIE,
+  ADMIN_TOKEN_MAX_AGE,
+  platformUrl,
+} from "../../../../lib/platform";
 
 export async function POST(request: Request) {
-  const response = await fetch(`${PLATFORM_API_URL.replace(/\/$/, "")}/auth/login`, {
+  const response = await fetch(platformUrl("auth/login"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: await request.text(),
@@ -20,12 +23,12 @@ export async function POST(request: Request) {
   }
 
   const cookieStore = await cookies();
-  cookieStore.set("platform_admin_token", payload.access_token, {
+  cookieStore.set(ADMIN_TOKEN_COOKIE, payload.access_token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: 60 * 60 * 12,
+    maxAge: ADMIN_TOKEN_MAX_AGE,
   });
 
   return NextResponse.json(payload.user);
