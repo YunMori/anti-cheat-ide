@@ -173,6 +173,13 @@ function ProblemForm({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
+  const updateTestCase = (index: number, patch: Partial<TestCaseDraft>) =>
+    setTestCases((current) =>
+      current.map((item, itemIndex) =>
+        itemIndex === index ? { ...item, ...patch } : item,
+      ),
+    );
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setBusy(true);
@@ -249,11 +256,7 @@ function ProblemForm({
                   type="checkbox"
                   checked={testCase.hidden}
                   onChange={(event) =>
-                    setTestCases((current) =>
-                      current.map((item, itemIndex) =>
-                        itemIndex === index ? { ...item, hidden: event.target.checked } : item,
-                      ),
-                    )
+                    updateTestCase(index, { hidden: event.target.checked })
                   }
                 />
                 숨은 케이스
@@ -263,11 +266,7 @@ function ProblemForm({
               aria-label={`테스트 ${index + 1} 입력`}
               value={testCase.stdin}
               onChange={(event) =>
-                setTestCases((current) =>
-                  current.map((item, itemIndex) =>
-                    itemIndex === index ? { ...item, stdin: event.target.value } : item,
-                  ),
-                )
+                updateTestCase(index, { stdin: event.target.value })
               }
               placeholder="stdin"
             />
@@ -275,13 +274,7 @@ function ProblemForm({
               aria-label={`테스트 ${index + 1} 예상 출력`}
               value={testCase.expected_stdout}
               onChange={(event) =>
-                setTestCases((current) =>
-                  current.map((item, itemIndex) =>
-                    itemIndex === index
-                      ? { ...item, expected_stdout: event.target.value }
-                      : item,
-                  ),
-                )
+                updateTestCase(index, { expected_stdout: event.target.value })
               }
               placeholder="expected stdout"
             />
