@@ -1,0 +1,20 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+node_modules/
+.next/
+coverage/
+dist/
+build/
+*.log
+*.tsbuildinfo
+
+# 단일 레포 통합 시 보관한 중첩 레포 백업 번들
+_archive/
+*.bundle
