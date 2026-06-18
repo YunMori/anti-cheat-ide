@@ -1,9 +1,12 @@
-.PHONY: test test-ai test-platform test-judge test-detection test-integration test-docker-runtime lint-frontend lint-admin build-frontend build-admin docker-prepull dev-services dev-judge
+.PHONY: test test-ai test-backend test-platform test-judge test-detection test-integration test-docker-runtime lint-frontend lint-admin build-frontend build-admin docker-prepull dev-services dev-judge
 
-test: test-ai test-platform test-judge test-detection test-integration lint-frontend lint-admin
+test: test-ai test-backend test-platform test-judge test-detection test-integration lint-frontend lint-admin
 
 test-ai:
 	cd ai_engine && PYTHONPATH=. python3 -m pytest -q
+
+test-backend:
+	cd backend && PYTHONPATH=. ../.venv/bin/python -m pytest -q
 
 test-platform:
 	cd apps/platform-api && ../../.venv/bin/python -m pytest -q

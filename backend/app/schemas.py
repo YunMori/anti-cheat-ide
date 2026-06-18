@@ -1,15 +1,21 @@
+"""WebSocket 메시지 스키마.
+
+필드명은 docs/contracts/event-schema.md 의 snake_case 규약에 맞춘다.
+"""
 from pydantic import BaseModel
-from typing import List, Optional, Union
+
 
 class KeystrokeEvent(BaseModel):
     key: str
     type: str  # 'keydown' or 'keyup'
     timestamp: int
-    cursorOffset: int
+    cursor_offset: int
+
 
 class SessionData(BaseModel):
-    events: List[KeystrokeEvent]
+    events: list[KeystrokeEvent]
     timestamp: int
+
 
 class PasteEvent(BaseModel):
     type: str = "PASTE_EVENT"
