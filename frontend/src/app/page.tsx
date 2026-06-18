@@ -78,11 +78,9 @@ export default function AntiCheatIDE() {
       const accepted = (await response.json()) as SubmissionAccepted;
       setSubmission(accepted);
       addAlert(
-        accepted.judge_result
-          ? `채점 완료: ${accepted.judge_result.passed_count}/${accepted.judge_result.total_count}`
-          : accepted.status === "judge_failed"
-            ? "제출은 저장됐지만 채점 서비스 호출에 실패했습니다."
-            : "제출이 저장됐고 채점을 기다리고 있습니다.",
+        accepted.status === "judge_failed"
+          ? "제출은 저장됐지만 채점 서비스 호출에 실패했습니다."
+          : "제출이 완료되었습니다.",
       );
 
       // 해금 상태 갱신 후, 다음 문제가 열렸으면 자동 이동

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { LANGUAGE_LABELS } from "../lib/constants";
 import type { TransportState } from "../lib/session-event-client";
 import type {
@@ -31,6 +33,8 @@ export function ProblemSidebar({
   transport,
   submission,
 }: ProblemSidebarProps) {
+  const [showProblem, setShowProblem] = useState(true);
+
   return (
     <aside className="custom-scrollbar w-80 overflow-y-auto border-r border-gray-700 bg-gray-800 p-6">
       <ProblemList
@@ -39,52 +43,64 @@ export function ProblemSidebar({
         onSelect={onSelectProblem}
       />
 
-      <div className="mb-6">
-        <span className="rounded bg-cyan-900 px-2 py-1 text-[10px] font-bold text-cyan-300">
-          LEVEL 2
-        </span>
-        <h2 className="mt-2 text-xl font-bold text-gray-100">
-          {problem?.title ?? "Fibonacci Series"}
-        </h2>
-      </div>
+      <button
+        type="button"
+        onClick={() => setShowProblem((value) => !value)}
+        className="mb-4 rounded border border-cyan-700 px-3 py-1.5 text-xs font-bold text-cyan-300 transition-colors hover:bg-cyan-900/40"
+      >
+        {showProblem ? "문제 숨기기" : "문제 보이기"}
+      </button>
 
-      <div className="space-y-4 text-sm leading-relaxed text-gray-400">
-        {problem ? (
-          <>
-            <p className="whitespace-pre-wrap">{problem.statement}</p>
-            <div className="rounded-lg border border-gray-700 bg-gray-900 p-4 font-mono text-xs">
-              제한: {problem.time_limit_ms}ms / {problem.memory_limit_mb}MB
-            </div>
-            {problem.public_test_cases.map((testCase, index) => (
-              <div
-                key={testCase.id}
-                className="rounded-lg border border-gray-700 bg-gray-900 p-4 font-mono text-xs"
-              >
-                <strong className="mb-2 block text-cyan-400">
-                  예제 {index + 1}
-                </strong>
-                <pre className="whitespace-pre-wrap">
-                  입력: {testCase.stdin || "(없음)"}
-                </pre>
-                <pre className="mt-2 whitespace-pre-wrap">
-                  출력: {testCase.expected_stdout || "(없음)"}
-                </pre>
-              </div>
-            ))}
-          </>
-        ) : (
-          <>
-            <p>피보나치 수는 수학에서 매우 유명한 수열입니다.</p>
-            <div className="rounded-lg border border-gray-700 bg-gray-900 p-4 font-mono text-xs italic">
-              F(n) = F(n-1) + F(n-2)
-            </div>
-            <p>
-              인자 n(0 ≤ n ≤ 30)을 받아 n번째 피보나치 수를 반환하는 효율적인
-              알고리즘을 작성하세요.
-            </p>
-          </>
-        )}
-      </div>
+      {showProblem && (
+        <>
+          <div className="mb-6">
+            <span className="rounded bg-cyan-900 px-2 py-1 text-[10px] font-bold text-cyan-300">
+              LEVEL 2
+            </span>
+            <h2 className="mt-2 text-xl font-bold text-gray-100">
+              {problem?.title ?? "Fibonacci Series"}
+            </h2>
+          </div>
+
+          <div className="space-y-4 text-sm leading-relaxed text-gray-400">
+            {problem ? (
+              <>
+                <p className="whitespace-pre-wrap">{problem.statement}</p>
+                <div className="rounded-lg border border-gray-700 bg-gray-900 p-4 font-mono text-xs">
+                  제한: {problem.time_limit_ms}ms / {problem.memory_limit_mb}MB
+                </div>
+                {problem.public_test_cases.map((testCase, index) => (
+                  <div
+                    key={testCase.id}
+                    className="rounded-lg border border-gray-700 bg-gray-900 p-4 font-mono text-xs"
+                  >
+                    <strong className="mb-2 block text-cyan-400">
+                      예제 {index + 1}
+                    </strong>
+                    <pre className="whitespace-pre-wrap">
+                      입력: {testCase.stdin || "(없음)"}
+                    </pre>
+                    <pre className="mt-2 whitespace-pre-wrap">
+                      출력: {testCase.expected_stdout || "(없음)"}
+                    </pre>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                <p>피보나치 수는 수학에서 매우 유명한 수열입니다.</p>
+                <div className="rounded-lg border border-gray-700 bg-gray-900 p-4 font-mono text-xs italic">
+                  F(n) = F(n-1) + F(n-2)
+                </div>
+                <p>
+                  인자 n(0 ≤ n ≤ 30)을 받아 n번째 피보나치 수를 반환하는 효율적인
+                  알고리즘을 작성하세요.
+                </p>
+              </>
+            )}
+          </div>
+        </>
+      )}
 
       <div className="mt-8 space-y-4">
         <label className="block text-xs font-bold text-gray-300">
@@ -126,18 +142,10 @@ export function ProblemSidebar({
               Submission
             </h3>
             <p>ID: {submission.id}</p>
-            <p>Status: {submission.status}</p>
-            {submission.judge_result ? (
-              <>
-                <p>
-                  Result: {submission.judge_result.status} (
-                  {submission.judge_result.passed_count}/
-                  {submission.judge_result.total_count})
-                </p>
-                <p>Duration: {submission.judge_result.duration_ms}ms</p>
-              </>
+            {submission.status === "judge_failed" ? (
+              <p>제출은 저장됐지만 채점 서비스 호출에 실패했습니다.</p>
             ) : (
-              <p>Judge result is not available yet.</p>
+              <p>제출이 접수되었습니다. 결과는 공개되지 않습니다.</p>
             )}
           </section>
         )}
