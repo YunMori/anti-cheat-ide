@@ -1,0 +1,56 @@
+import type { SupportedLanguage } from "./types";
+import type {
+  TransportState,
+  TransportStatus,
+} from "./session-event-client";
+
+export const INITIAL_CODE =
+  "// 코딩 테스트를 시작하세요.\nfunction solution(n) {\n    return n;\n}";
+
+export const PLATFORM_API_URL =
+  process.env.NEXT_PUBLIC_PLATFORM_API_URL ?? "http://localhost:8001";
+
+export const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
+  python: "Python 3.12",
+  javascript: "JavaScript ES2022",
+  cpp: "C++20",
+  java: "Java 21",
+};
+
+export const MONACO_LANGUAGES: Record<SupportedLanguage, string> = {
+  python: "python",
+  javascript: "javascript",
+  cpp: "cpp",
+  java: "java",
+};
+
+export const DEFAULT_STARTERS: Record<SupportedLanguage, string> = {
+  python: "# 코딩 테스트를 시작하세요.\n",
+  javascript: INITIAL_CODE,
+  cpp: "#include <iostream>\nusing namespace std;\n\nint main() {\n    return 0;\n}\n",
+  java: "public class Main {\n    public static void main(String[] args) {\n    }\n}\n",
+};
+
+export const INITIAL_TRANSPORT_STATE: TransportState = {
+  status: "idle",
+  clientId: "not-configured",
+  pendingEvents: 0,
+};
+
+export const STATUS_LABELS: Record<TransportStatus, string> = {
+  idle: "대기 중",
+  queued: "전송 대기",
+  sending: "전송 중",
+  synced: "동기화 완료",
+  retrying: "재시도 중",
+  error: "설정 오류",
+};
+
+export const STATUS_COLORS: Record<TransportStatus, string> = {
+  idle: "text-gray-400",
+  queued: "text-yellow-400",
+  sending: "text-cyan-400",
+  synced: "text-green-400",
+  retrying: "text-orange-400",
+  error: "text-red-400",
+};
