@@ -196,6 +196,7 @@ function ProblemForm({
         starter_code: {},
         time_limit_ms: Number(form.get("timeLimit")),
         memory_limit_mb: Number(form.get("memoryLimit")),
+        pass_threshold: Number(form.get("passThreshold")) / 100,
         test_cases: testCases,
       });
       onCreated(title);
@@ -246,6 +247,12 @@ function ProblemForm({
         <Field label="시간 제한(ms)" name="timeLimit" type="number" defaultValue="2000" />
         <Field label="메모리(MB)" name="memoryLimit" type="number" defaultValue="128" />
       </div>
+      <Field
+        label="다음 문제 해금 통과율(%)"
+        name="passThreshold"
+        type="number"
+        defaultValue="100"
+      />
       <div className="testCaseStack">
         {testCases.map((testCase, index) => (
           <section className="testCaseEditor" key={index}>

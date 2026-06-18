@@ -32,8 +32,10 @@ def create_problem(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="assessment not found",
         )
+    existing = repository.list_problems(payload.assessment_id)
     problem = Problem(
         id=new_id("prb"),
+        order_index=len(existing),
         test_cases=[
             TestCase(id=new_id("tc"), **test_case.model_dump())
             for test_case in payload.test_cases
