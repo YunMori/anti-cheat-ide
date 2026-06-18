@@ -1,0 +1,38 @@
+openapi: 3.1.0
+info:
+  title: Detection Service API
+  version: 0.1.0
+paths:
+  /health:
+    get:
+      operationId: health
+      responses:
+        "200": { description: 서비스 정상 }
+  /assess:
+    post:
+      operationId: assessRisk
+      responses:
+        "200":
+          description: 설명 가능한 위험 평가
+components:
+  schemas:
+    RiskAssessment:
+      type: object
+      required: [session_id, risk_score, review_recommended, signals]
+      properties:
+        session_id: { type: string }
+        risk_score:
+          type: number
+          minimum: 0
+          maximum: 100
+        review_recommended: { type: boolean }
+        signals:
+          type: array
+          items:
+            type: object
+            required: [code, score, evidence]
+            properties:
+              code: { type: string }
+              score: { type: number }
+              evidence: { type: object }
+

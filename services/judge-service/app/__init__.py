@@ -1,0 +1,1 @@
+"""Synchronous MVP Judge Service."""

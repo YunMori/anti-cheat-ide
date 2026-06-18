@@ -1,0 +1,166 @@
+openapi: 3.1.0
+info:
+  title: Web IDE Platform API
+  version: 0.1.0
+paths:
+  /health:
+    get:
+      operationId: health
+      responses:
+        "200":
+          description: 서비스 정상
+  /auth/signup:
+    post:
+      operationId: signupAdmin
+      responses:
+        "201":
+          description: 관리자 가입 생성됨. 첫 가입은 자동 승인된다.
+        "409":
+          description: 이미 등록된 이메일
+  /auth/login:
+    post:
+      operationId: loginAdmin
+      responses:
+        "200":
+          description: 승인된 admin 또는 reviewer에게 Bearer 토큰 발급
+        "401":
+          description: 잘못된 자격 증명 또는 승인 대기 중인 계정
+  /auth/me:
+    get:
+      operationId: getCurrentAdmin
+      responses:
+        "200":
+          description: 현재 관리자 신원
+        "401":
+          description: 인증 필요
+  /admin/users/pending:
+    get:
+      operationId: listPendingAdminUsers
+      responses:
+        "200":
+          description: 승인 대기 중인 관리자 가입 요청
+        "403":
+          description: admin 역할 필요
+  /admin/users/{user_id}/approve:
+    post:
+      operationId: approveAdminUser
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: 대기 중인 사용자를 admin 또는 reviewer로 승인함
+        "403":
+          description: admin 역할 필요
+  /assessments:
+    post:
+      operationId: createAssessment
+      responses:
+        "201":
+          description: 시험 생성됨
+    get:
+      operationId: listAssessments
+      responses:
+        "200":
+          description: 시험 목록 반환
+  /problems:
+    post:
+      operationId: createProblem
+      responses:
+        "201":
+          description: 문제와 테스트 케이스 생성됨
+    get:
+      operationId: listProblems
+      responses:
+        "200":
+          description: 관리자용 문제 목록 반환
+  /sessions:
+    post:
+      operationId: createSession
+      responses:
+        "201":
+          description: 응시자 세션 생성됨
+  /assessments/{assessment_id}/invites:
+    post:
+      operationId: createCandidateInvite
+      parameters:
+        - in: path
+          name: assessment_id
+          required: true
+          schema: { type: string }
+      responses:
+        "201":
+          description: 1회용 응시자 초대 링크 생성됨
+        "403":
+          description: admin 역할 필요
+  /invites/{token}:
+    get:
+      operationId: previewCandidateInvite
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: 응시자 초대 미리보기
+        "410":
+          description: 초대 만료됨
+  /invites/{token}/redeem:
+    post:
+      operationId: redeemCandidateInvite
+      parameters:
+        - in: path
+          name: token
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: 초대 교환 완료 및 응시자 세션 생성됨
+        "409":
+          description: 이미 사용된 초대
+        "410":
+          description: 초대 만료됨
+  /sessions/{session_id}/events:
+    post:
+      operationId: ingestSessionEvents
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema: { type: string }
+      responses:
+        "202":
+          description: 이벤트 배치 수락됨
+        "409":
+          description: 중복되거나 순서가 어긋난 sequence
+  /sessions/{session_id}/problems:
+    get:
+      operationId: listCandidateProblems
+      responses:
+        "200":
+          description: 숨은 테스트 케이스를 제외한 문제 목록
+  /sessions/{session_id}/submissions:
+    post:
+      operationId: createSubmission
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema: { type: string }
+      responses:
+        "202":
+          description: 채점을 위해 제출물 수락됨
+  /sessions/{session_id}/risk:
+    get:
+      operationId: getSessionRisk
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: 근거가 뒷받침된 위험 평가
