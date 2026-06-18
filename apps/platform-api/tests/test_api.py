@@ -142,14 +142,173 @@ def test_problem_is_created_and_hidden_cases_are_not_sent_to_candidate(
     admin_response = client.get(
         "/problems", params={"assessment_id": problem["assessment_id"]}
     )
-    candidate_response = client.get(f"/sessions/{session['id']}/problems")
+    list_response = client.get(f"/sessions/{session['id']}/problems")
+    detail_response = client.get(
+        f"/sessions/{session['id']}/problems/{problem['id']}"
+    )
 
     assert admin_response.status_code == 200
     assert len(admin_response.json()[0]["test_cases"]) == 2
-    assert candidate_response.status_code == 200
-    assert candidate_response.json()[0]["id"] == problem["id"]
-    assert len(candidate_response.json()[0]["public_test_cases"]) == 1
-    assert candidate_response.json()[0]["public_test_cases"][0]["hidden"] is False
+
+    # 목록은 요약(상태만). 첫 문제는 해금 상태.
+    assert list_response.status_code == 200
+    summary = list_response.json()[0]
+    assert summary["id"] == problem["id"]
+    assert summary["status"] == "unlocked"
+    assert summary["order_index"] == 0
+
+    # 상세에서만 내용 제공, 숨은 케이스 제외.
+    assert detail_response.status_code == 200
+    detail = detail_response.json()
+    assert len(detail["public_test_cases"]) == 1
+    assert detail["public_test_cases"][0]["hidden"] is False
+
+
+class _AllPassJudge:
+    """모든 테스트를 통과시키는 가짜 Judge (해금 테스트용)."""
+
+    def judge(self, submission, problem) -> JudgeResult:
+        total = len(problem.test_cases)
+        return JudgeResult(
+            id=f"jr_{submission.id}",
+            submission_id=submission.id,
+            status="accepted",
+            passed_count=total,
+            total_count=total,
+            duration_ms=1,
+            test_cases=[],
+            created_at=utc_now(),
+        )
+
+
+def _make_two_problem_assessment(
+    repository: InMemoryPlatformRepository,
+) -> tuple[TestClient, str, list[str]]:
+    judged_client = TestClient(create_app(repository, judge_client=_AllPassJudge()))
+    starts_at = datetime.now(timezone.utc)
+    assessment = judged_client.post(
+        "/assessments",
+        json={
+            "organization_id": "org_1",
+            "title": "Sequential",
+            "starts_at": starts_at.isoformat(),
+            "ends_at": (starts_at + timedelta(hours=2)).isoformat(),
+        },
+    ).json()
+    problem_ids = []
+    for title in ("First", "Second"):
+        created = judged_client.post(
+            "/problems",
+            json={
+                "assessment_id": assessment["id"],
+                "title": title,
+                "statement": "solve",
+                "allowed_languages": ["python"],
+                "time_limit_ms": 1000,
+                "memory_limit_mb": 128,
+                "test_cases": [
+                    {"stdin": "", "expected_stdout": "", "hidden": False}
+                ],
+            },
+        )
+        problem_ids.append(created.json()["id"])
+    session = judged_client.post(
+        "/sessions",
+        json={"assessment_id": assessment["id"], "candidate_id": "user_seq"},
+    ).json()
+    return judged_client, session["id"], problem_ids
+
+
+def test_second_problem_is_locked_until_first_is_solved(
+    repository: InMemoryPlatformRepository,
+) -> None:
+    client, session_id, problem_ids = _make_two_problem_assessment(repository)
+
+    # 처음엔 1번 해금, 2번 잠김(제목도 숨김), 잠긴 상세는 423.
+    listing = client.get(f"/sessions/{session_id}/problems").json()
+    assert [item["status"] for item in listing] == ["unlocked", "locked"]
+    assert listing[1]["title"] is None
+    locked = client.get(f"/sessions/{session_id}/problems/{problem_ids[1]}")
+    assert locked.status_code == 423
+
+    # 1번을 통과 제출 → 1번 solved, 2번 해금.
+    client.post(
+        f"/sessions/{session_id}/submissions",
+        json={
+            "problem_id": problem_ids[0],
+            "language": "python",
+            "source_code": "x",
+        },
+    )
+
+    listing = client.get(f"/sessions/{session_id}/problems").json()
+    assert [item["status"] for item in listing] == ["solved", "unlocked"]
+    assert listing[1]["title"] == "Second"
+    unlocked = client.get(f"/sessions/{session_id}/problems/{problem_ids[1]}")
+    assert unlocked.status_code == 200
+
+
+def test_below_threshold_submission_keeps_next_problem_locked(
+    repository: InMemoryPlatformRepository,
+) -> None:
+    class _HalfJudge:
+        def judge(self, submission, problem) -> JudgeResult:
+            return JudgeResult(
+                id=f"jr_{submission.id}",
+                submission_id=submission.id,
+                status="wrong_answer",
+                passed_count=1,
+                total_count=2,
+                duration_ms=1,
+                test_cases=[],
+                created_at=utc_now(),
+            )
+
+    client = TestClient(create_app(repository, judge_client=_HalfJudge()))
+    starts_at = datetime.now(timezone.utc)
+    assessment = client.post(
+        "/assessments",
+        json={
+            "organization_id": "org_1",
+            "title": "Threshold",
+            "starts_at": starts_at.isoformat(),
+            "ends_at": (starts_at + timedelta(hours=2)).isoformat(),
+        },
+    ).json()
+    first = client.post(
+        "/problems",
+        json={
+            "assessment_id": assessment["id"],
+            "title": "First",
+            "statement": "solve",
+            "allowed_languages": ["python"],
+            "pass_threshold": 1.0,
+            "test_cases": [{"stdin": "", "expected_stdout": "", "hidden": False}],
+        },
+    ).json()
+    client.post(
+        "/problems",
+        json={
+            "assessment_id": assessment["id"],
+            "title": "Second",
+            "statement": "solve",
+            "allowed_languages": ["python"],
+            "test_cases": [{"stdin": "", "expected_stdout": "", "hidden": False}],
+        },
+    )
+    session = client.post(
+        "/sessions",
+        json={"assessment_id": assessment["id"], "candidate_id": "user_t"},
+    ).json()
+
+    client.post(
+        f"/sessions/{session['id']}/submissions",
+        json={"problem_id": first["id"], "language": "python", "source_code": "x"},
+    )
+
+    listing = client.get(f"/sessions/{session['id']}/problems").json()
+    # 통과율 0.5 < 1.0 → 1번 미해결, 2번 잠김 유지.
+    assert [item["status"] for item in listing] == ["unlocked", "locked"]
 
 
 def test_problem_requires_existing_assessment(client: TestClient) -> None:

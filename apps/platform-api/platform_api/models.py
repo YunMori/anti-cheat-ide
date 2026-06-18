@@ -81,6 +81,7 @@ class Assessment(AssessmentCreate):
 
 
 SupportedLanguage = Literal["python", "javascript", "cpp", "java"]
+ProblemProgressStatus = Literal["locked", "unlocked", "solved"]
 
 
 class TestCaseCreate(StrictModel):
@@ -101,6 +102,8 @@ class ProblemCreate(StrictModel):
     starter_code: dict[SupportedLanguage, str] = Field(default_factory=dict)
     time_limit_ms: int = Field(default=2000, gt=0, le=30_000)
     memory_limit_mb: int = Field(default=128, ge=16, le=1024)
+    # 다음 문제 해금에 필요한 통과율(0~1). 1.0 = 전체 테스트 통과.
+    pass_threshold: float = Field(default=1.0, ge=0, le=1)
     test_cases: list[TestCaseCreate] = Field(min_length=1)
 
     @model_validator(mode="after")
@@ -126,10 +129,14 @@ class Problem(StrictModel):
     starter_code: dict[SupportedLanguage, str]
     time_limit_ms: int
     memory_limit_mb: int
+    pass_threshold: float = 1.0
+    order_index: int = 0
     test_cases: list[TestCase]
 
 
 class CandidateProblem(StrictModel):
+    """해금된 문제의 전체 내용(응시자용 상세)."""
+
     id: str
     assessment_id: str
     title: str
@@ -138,7 +145,20 @@ class CandidateProblem(StrictModel):
     starter_code: dict[SupportedLanguage, str]
     time_limit_ms: int
     memory_limit_mb: int
+    pass_threshold: float
+    order_index: int
+    status: ProblemProgressStatus
     public_test_cases: list[TestCase]
+
+
+class CandidateProblemSummary(StrictModel):
+    """문제 목록 항목. 잠긴 문제는 title을 포함해 내용을 노출하지 않는다."""
+
+    id: str
+    order_index: int
+    status: ProblemProgressStatus
+    pass_threshold: float
+    title: str | None = None
 
 
 # --- 세션/초대 (sessions & invites) ---
