@@ -4,18 +4,28 @@ AI-assisted cheating risk detection and sandboxed code judging platform.
 
 ## Repository layout
 
-- `frontend/`: existing candidate-facing Monaco IDE
-- `backend/`: existing WebSocket prototype
-- `ai_engine/`: detection research and red-team typing simulator
-- `apps/platform-api/`: assessment, session, and submission API
-- `apps/admin-web/`: admin/reviewer login, assessment operations, invite generation, and review UI
-- `services/judge-service/`: isolated code judging service
-- `services/detection-service/`: explainable risk scoring service
-- `docs/contracts/`: service contracts owned by the orchestrator
+### Live MVP (production-oriented)
 
-Existing nested Git repositories are intentionally preserved during the
-initial migration. New services must communicate only through the contracts
-under `docs/contracts/`.
+These make up the running candidate-to-review system.
+
+- `frontend/`: candidate-facing Monaco IDE (Candidate Web)
+- `apps/platform-api/`: assessment, session, submission, and risk orchestration API
+- `apps/admin-web/`: admin/reviewer login, assessment operations, invite generation, and review UI
+- `services/judge-service/`: isolated code judging service (Docker sandbox)
+- `services/detection-service/`: explainable, rule-based risk scoring service
+- `docs/`: architecture, threat model, release gates, and `docs/contracts/` service contracts
+
+### Legacy / Research (kept for further development)
+
+Not part of the live request flow. Preserved and maintained for ongoing work;
+the live services above do **not** import from these.
+
+- `backend/`: WebSocket prototype for real-time human-likeness scoring
+- `ai_engine/`: red-team human-like typing simulator (4-layer HMM/GAN/KLM pipeline)
+  plus a proof-of-concept detector (`ai_engine/detector.py`)
+
+New services must communicate only through the contracts under `docs/contracts/`,
+not through each other's internals.
 
 ## Delivery order
 
