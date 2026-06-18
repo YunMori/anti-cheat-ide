@@ -20,8 +20,8 @@ def _load_ai_engine_detector(model_dir: str):
     ai_engine_path = Path(__file__).resolve().parent.parent.parent / "ai_engine"
     if str(ai_engine_path) not in sys.path:
         sys.path.append(str(ai_engine_path))
-    # ai_engine의 PoC 판별기. (F 단계에서 detection 패키지로 이동 시 이 줄만 변경)
-    from detector import AntiCheatDetector
+    # ai_engine의 PoC 판별기 (detection 패키지).
+    from detection import AntiCheatDetector
 
     return AntiCheatDetector(model_dir=model_dir)
 
