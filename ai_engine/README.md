@@ -295,6 +295,8 @@ Runs a Kolmogorov-Smirnov test comparing generated timing distributions against 
 ├── core/
 │   ├── pipeline.py                # 4-layer orchestrator
 │   └── session.py                 # SessionConfig / SessionResult
+├── detection/                     # 블루팀: 부정행위 판별기 (생성 파이프라인과 분리)
+│   └── detector.py                # GAN Discriminator 재사용 인간-유사도 점수 (PoC)
 ├── layer1_codegen/
 │   ├── code_buffer.py             # Code + metadata container
 │   └── dependency_extractor.py   # Multi-language static analysis

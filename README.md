@@ -22,7 +22,7 @@ the live services above do **not** import from these.
 
 - `backend/`: WebSocket prototype for real-time human-likeness scoring
 - `ai_engine/`: red-team human-like typing simulator (4-layer HMM/GAN/KLM pipeline)
-  plus a proof-of-concept detector (`ai_engine/detector.py`)
+  plus a proof-of-concept detector (`ai_engine/detection/`)
 
 New services must communicate only through the contracts under `docs/contracts/`,
 not through each other's internals.
