@@ -19,6 +19,8 @@ class HealthResponse(StrictModel):
     service: Literal["platform-api"] = "platform-api"
 
 
+# --- 관리자/인증 (admin & auth) ---
+
 AdminRole = Literal["admin", "reviewer"]
 UserStatus = Literal["pending", "active"]
 
@@ -56,6 +58,9 @@ class AdminUserRecord(AdminUser):
 
 class AdminApproval(StrictModel):
     role: AdminRole
+
+
+# --- 시험/문제 (assessments & problems) ---
 
 
 class AssessmentCreate(StrictModel):
@@ -136,6 +141,9 @@ class CandidateProblem(StrictModel):
     public_test_cases: list[TestCase]
 
 
+# --- 세션/초대 (sessions & invites) ---
+
+
 class SessionCreate(StrictModel):
     assessment_id: str = Field(min_length=1)
     candidate_id: str = Field(min_length=1)
@@ -178,6 +186,9 @@ class CandidateInvitePreview(StrictModel):
 
 class CandidateInviteRedeemed(StrictModel):
     session: Session
+
+
+# --- 행동 이벤트 (behavioral events) ---
 
 
 class EventBase(StrictModel):
@@ -236,6 +247,9 @@ class EventBatchAccepted(StrictModel):
     next_sequence: int
 
 
+# --- 제출/채점 (submissions & judging) ---
+
+
 class SubmissionCreate(StrictModel):
     problem_id: str = Field(min_length=1)
     language: str = Field(min_length=1)
@@ -272,6 +286,9 @@ class JudgeResult(StrictModel):
 
 class SubmissionAccepted(Submission):
     judge_result: JudgeResult | None = None
+
+
+# --- 위험 평가 (risk) ---
 
 
 class RiskSignal(StrictModel):
