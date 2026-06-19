@@ -37,6 +37,7 @@ export default function AntiCheatIDE() {
 
   const [submitting, setSubmitting] = useState(false);
   const [submission, setSubmission] = useState<SubmissionAccepted | null>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const flushEvents = useCallback(async () => {
     const pending = await flush();
@@ -143,6 +144,8 @@ export default function AntiCheatIDE() {
           onSelectLanguage={selectLanguage}
           transport={transport}
           submission={submission}
+          collapsed={sidebarCollapsed}
+          onToggleCollapsed={() => setSidebarCollapsed((value) => !value)}
         />
 
         <EditorPane

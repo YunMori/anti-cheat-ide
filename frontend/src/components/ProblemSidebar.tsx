@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { LANGUAGE_LABELS } from "../lib/constants";
 import type { TransportState } from "../lib/session-event-client";
 import type {
@@ -21,6 +19,8 @@ interface ProblemSidebarProps {
   onSelectLanguage: (language: SupportedLanguage) => void;
   transport: TransportState;
   submission: SubmissionAccepted | null;
+  collapsed: boolean;
+  onToggleCollapsed: () => void;
 }
 
 export function ProblemSidebar({
@@ -32,27 +32,46 @@ export function ProblemSidebar({
   onSelectLanguage,
   transport,
   submission,
+  collapsed,
+  onToggleCollapsed,
 }: ProblemSidebarProps) {
-  const [showProblem, setShowProblem] = useState(true);
-
   return (
-    <aside className="custom-scrollbar w-80 overflow-y-auto border-r border-gray-700 bg-gray-800 p-6">
-      <ProblemList
-        problems={problems}
-        currentProblemId={currentProblemId}
-        onSelect={onSelectProblem}
-      />
-
-      <button
-        type="button"
-        onClick={() => setShowProblem((value) => !value)}
-        className="mb-4 rounded border border-cyan-700 px-3 py-1.5 text-xs font-bold text-cyan-300 transition-colors hover:bg-cyan-900/40"
-      >
-        {showProblem ? "문제 숨기기" : "문제 보이기"}
-      </button>
-
-      {showProblem && (
+    <aside
+      className={`custom-scrollbar shrink-0 overflow-hidden border-r border-gray-700 bg-gray-800 transition-[width] duration-200 ${
+        collapsed ? "w-10" : "w-80 overflow-y-auto p-6"
+      }`}
+    >
+      {collapsed ? (
+        <button
+          type="button"
+          onClick={onToggleCollapsed}
+          title="문제 패널 펼치기"
+          className="flex h-full w-full flex-col items-center gap-3 py-4 text-cyan-300 transition-colors hover:bg-cyan-900/30"
+        >
+          <span aria-hidden>▶</span>
+          <span className="text-xs font-bold [writing-mode:vertical-rl]">
+            문제
+          </span>
+        </button>
+      ) : (
         <>
+          <div className="mb-4 flex justify-end">
+            <button
+              type="button"
+              onClick={onToggleCollapsed}
+              title="문제 패널 접기"
+              className="rounded border border-gray-600 px-2 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-700"
+            >
+              ◀ 접기
+            </button>
+          </div>
+
+          <ProblemList
+            problems={problems}
+            currentProblemId={currentProblemId}
+            onSelect={onSelectProblem}
+          />
+
           <div className="mb-6">
             <span className="rounded bg-cyan-900 px-2 py-1 text-[10px] font-bold text-cyan-300">
               LEVEL 2
@@ -99,57 +118,57 @@ export function ProblemSidebar({
               </>
             )}
           </div>
+
+          <div className="mt-8 space-y-4">
+            <label className="block text-xs font-bold text-gray-300">
+              풀이 언어
+              <select
+                value={selectedLanguage}
+                onChange={(event) =>
+                  onSelectLanguage(event.target.value as SupportedLanguage)
+                }
+                className="mt-2 w-full rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-cyan-300"
+              >
+                {(
+                  problem?.allowed_languages ??
+                  (Object.keys(LANGUAGE_LABELS) as SupportedLanguage[])
+                ).map((language) => (
+                  <option key={language} value={language}>
+                    {LANGUAGE_LABELS[language]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="rounded-lg border-l-4 border-yellow-500 bg-gray-900 p-4">
+              <h3 className="mb-2 text-xs font-bold uppercase text-gray-300">
+                Attention
+              </h3>
+              <p className="text-[11px] text-gray-500">
+                키 입력, 붙여넣기 횟수, 코드 변경 및 포커스 변경이 시험 무결성
+                검토를 위해 기록됩니다. 클립보드 내용은 수집하지 않습니다.
+              </p>
+            </div>
+            {transport.lastError && (
+              <div className="rounded-lg border border-red-900 bg-red-950/40 p-4 text-xs text-red-300">
+                {transport.lastError}
+              </div>
+            )}
+            {submission && (
+              <section className="rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-300">
+                <h3 className="mb-2 font-bold uppercase text-cyan-300">
+                  Submission
+                </h3>
+                <p>ID: {submission.id}</p>
+                {submission.status === "judge_failed" ? (
+                  <p>제출은 저장됐지만 채점 서비스 호출에 실패했습니다.</p>
+                ) : (
+                  <p>제출이 접수되었습니다. 결과는 공개되지 않습니다.</p>
+                )}
+              </section>
+            )}
+          </div>
         </>
       )}
-
-      <div className="mt-8 space-y-4">
-        <label className="block text-xs font-bold text-gray-300">
-          풀이 언어
-          <select
-            value={selectedLanguage}
-            onChange={(event) =>
-              onSelectLanguage(event.target.value as SupportedLanguage)
-            }
-            className="mt-2 w-full rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-cyan-300"
-          >
-            {(
-              problem?.allowed_languages ??
-              (Object.keys(LANGUAGE_LABELS) as SupportedLanguage[])
-            ).map((language) => (
-              <option key={language} value={language}>
-                {LANGUAGE_LABELS[language]}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div className="rounded-lg border-l-4 border-yellow-500 bg-gray-900 p-4">
-          <h3 className="mb-2 text-xs font-bold uppercase text-gray-300">
-            Attention
-          </h3>
-          <p className="text-[11px] text-gray-500">
-            키 입력, 붙여넣기 횟수, 코드 변경 및 포커스 변경이 시험 무결성
-            검토를 위해 기록됩니다. 클립보드 내용은 수집하지 않습니다.
-          </p>
-        </div>
-        {transport.lastError && (
-          <div className="rounded-lg border border-red-900 bg-red-950/40 p-4 text-xs text-red-300">
-            {transport.lastError}
-          </div>
-        )}
-        {submission && (
-          <section className="rounded-lg border border-gray-700 bg-gray-900 p-4 text-xs text-gray-300">
-            <h3 className="mb-2 font-bold uppercase text-cyan-300">
-              Submission
-            </h3>
-            <p>ID: {submission.id}</p>
-            {submission.status === "judge_failed" ? (
-              <p>제출은 저장됐지만 채점 서비스 호출에 실패했습니다.</p>
-            ) : (
-              <p>제출이 접수되었습니다. 결과는 공개되지 않습니다.</p>
-            )}
-          </section>
-        )}
-      </div>
     </aside>
   );
 }
