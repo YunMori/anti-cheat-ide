@@ -28,6 +28,7 @@ export function EditorPane({
         onChange={(value) => onChange(value ?? "")}
         onMount={onMount}
         options={{
+          automaticLayout: true,
           fontSize: 15,
           fontFamily: "Fira Code, Menlo, Monaco, Consolas, monospace",
           fontLigatures: true,
