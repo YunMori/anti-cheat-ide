@@ -20,7 +20,11 @@ export function ProblemList({
   onSelect,
 }: ProblemListProps) {
   if (problems.length === 0) {
-    return null;
+    return (
+      <p className="mb-6 rounded border border-gray-700 bg-gray-900 p-3 text-xs text-gray-500">
+        아직 등록된 문제가 없습니다. 관리자에게 문의하세요.
+      </p>
+    );
   }
 
   return (
