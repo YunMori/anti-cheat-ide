@@ -129,14 +129,13 @@ export function ProblemSidebar({
                 }
                 className="mt-2 w-full rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-cyan-300"
               >
-                {(
-                  problem?.allowed_languages ??
-                  (Object.keys(LANGUAGE_LABELS) as SupportedLanguage[])
-                ).map((language) => (
-                  <option key={language} value={language}>
-                    {LANGUAGE_LABELS[language]}
-                  </option>
-                ))}
+                {(Object.keys(LANGUAGE_LABELS) as SupportedLanguage[]).map(
+                  (language) => (
+                    <option key={language} value={language}>
+                      {LANGUAGE_LABELS[language]}
+                    </option>
+                  ),
+                )}
               </select>
             </label>
             <div className="rounded-lg border-l-4 border-yellow-500 bg-gray-900 p-4">

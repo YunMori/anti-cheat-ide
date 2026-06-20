@@ -4,8 +4,7 @@ import type {
   TransportStatus,
 } from "./session-event-client";
 
-export const INITIAL_CODE =
-  "// 코딩 테스트를 시작하세요.\nfunction solution(n) {\n    return n;\n}";
+export const INITIAL_CODE = "";
 
 export const PLATFORM_API_URL =
   process.env.NEXT_PUBLIC_PLATFORM_API_URL ?? "http://localhost:8001";
@@ -25,10 +24,10 @@ export const MONACO_LANGUAGES: Record<SupportedLanguage, string> = {
 };
 
 export const DEFAULT_STARTERS: Record<SupportedLanguage, string> = {
-  python: "# 코딩 테스트를 시작하세요.\n",
-  javascript: INITIAL_CODE,
-  cpp: "#include <iostream>\nusing namespace std;\n\nint main() {\n    return 0;\n}\n",
-  java: "public class Main {\n    public static void main(String[] args) {\n    }\n}\n",
+  python: "# 여기에 작성하세요\n",
+  javascript: "// 여기에 작성하세요\n",
+  cpp: "#include <iostream>\n\nint main() {\n    \n    return 0;\n}\n",
+  java: "public class Main {\n    public static void main(String[] args) {\n        \n    }\n}\n",
 };
 
 export const INITIAL_TRANSPORT_STATE: TransportState = {

@@ -5,6 +5,8 @@ judged/judge_failed 로 갱신한다.
 """
 from __future__ import annotations
 
+from typing import get_args
+
 from fastapi import APIRouter, HTTPException, Request, status
 import httpx
 
@@ -19,6 +21,7 @@ from ..models import (
     Submission,
     SubmissionAccepted,
     SubmissionCreate,
+    SupportedLanguage,
     utc_now,
 )
 
@@ -43,10 +46,10 @@ def create_submission(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="problem not found for session assessment",
         )
-    if payload.language not in problem.allowed_languages:
+    if payload.language not in get_args(SupportedLanguage):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="language is not allowed for this problem",
+            detail="unsupported language",
         )
     submission = Submission(
         id=new_id("sub"),
