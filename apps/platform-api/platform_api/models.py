@@ -208,6 +208,21 @@ class CandidateInviteRedeemed(StrictModel):
     session: Session
 
 
+class ParticipantStatus(StrictModel):
+    """admin 모니터링용 참가자 1명의 응시 현황 집계."""
+
+    candidate_id: str
+    invited_at: datetime
+    expires_at: datetime
+    redeemed: bool
+    session_id: str | None = None
+    session_status: str | None = None
+    risk_score: float | None = None
+    review_recommended: bool | None = None
+    solved_count: int = 0
+    total_problems: int = 0
+
+
 # --- 행동 이벤트 (behavioral events) ---
 
 
