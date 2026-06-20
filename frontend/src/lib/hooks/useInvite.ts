@@ -49,7 +49,15 @@ export function useInvite() {
       .then((loadedInvite) => {
         setInvite(loadedInvite);
         if (loadedInvite.used) {
-          setInviteError("이미 사용된 초대 링크입니다.");
+          if (
+            loadedInvite.session_id &&
+            loadedInvite.session_status !== "finished"
+          ) {
+            // 아직 종료 전이면 같은 세션으로 재입장한다.
+            setSessionId(loadedInvite.session_id);
+          } else {
+            setInviteError("이미 종료된 시험입니다.");
+          }
         }
       })
       .catch((error: unknown) => {
@@ -83,7 +91,7 @@ export function useInvite() {
       }
       const redeemed = (await response.json()) as { session: SessionInfo };
       setSessionId(redeemed.session.id);
-      window.history.replaceState(null, "", window.location.pathname);
+      // 종료 전까지 새로고침으로 재입장할 수 있도록 URL의 ?invite= 토큰을 유지한다.
     } catch (error) {
       setInviteError(
         error instanceof Error ? error.message : "시험 시작에 실패했습니다.",

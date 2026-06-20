@@ -11,8 +11,10 @@ interface IdeHeaderProps {
   transport: TransportState;
   problem: CandidateProblem | null;
   submitting: boolean;
+  finishing: boolean;
   onFlush: () => void;
   onSubmit: () => void;
+  onFinish: () => void;
 }
 
 export function IdeHeader({
@@ -22,8 +24,10 @@ export function IdeHeader({
   transport,
   problem,
   submitting,
+  finishing,
   onFlush,
   onSubmit,
+  onFinish,
 }: IdeHeaderProps) {
   return (
     <header className="flex items-center justify-between border-b border-gray-700 bg-gray-800 p-4 shadow-md">
@@ -83,6 +87,14 @@ export function IdeHeader({
           className="rounded-md bg-green-500 px-5 py-2.5 font-bold text-gray-900 shadow-lg transition-all hover:bg-green-400 disabled:cursor-not-allowed disabled:bg-gray-600"
         >
           {submitting ? "SUBMITTING" : "SUBMIT"}
+        </button>
+        <button
+          type="button"
+          disabled={finishing}
+          onClick={onFinish}
+          className="rounded-md bg-red-600 px-5 py-2.5 font-bold text-white shadow-lg transition-all hover:bg-red-500 active:scale-95 disabled:cursor-not-allowed disabled:bg-gray-600"
+        >
+          {finishing ? "종료 중..." : "응시 종료"}
         </button>
       </div>
     </header>

@@ -14,6 +14,7 @@ from ..dependencies import (
     CurrentAdmin,
     RepositoryDependency,
     new_id,
+    require_active_session,
     require_session,
 )
 from ..models import (
@@ -39,7 +40,7 @@ def create_submission(
     repository: RepositoryDependency,
     request: Request,
 ) -> SubmissionAccepted:
-    session = require_session(repository, session_id)
+    session = require_active_session(repository, session_id)
     problem = repository.get_problem(payload.problem_id)
     if problem is None or problem.assessment_id != session.assessment_id:
         raise HTTPException(
