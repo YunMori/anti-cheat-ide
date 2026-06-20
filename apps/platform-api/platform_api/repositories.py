@@ -91,6 +91,10 @@ class PlatformRepository(Protocol):
         self, token: str, used_at, session: Session
     ) -> CandidateInvite | None: ...
 
+    def list_candidate_invites(
+        self, assessment_id: str
+    ) -> list[CandidateInvite]: ...
+
 
 class InMemoryPlatformRepository:
     """Thread-safe MVP repository matching the eventual PostgreSQL entities."""
@@ -318,3 +322,15 @@ class InMemoryPlatformRepository:
             )
             self._candidate_invites[invite_id] = updated
             return deepcopy(updated)
+
+    def list_candidate_invites(
+        self, assessment_id: str
+    ) -> list[CandidateInvite]:
+        with self._lock:
+            invites = [
+                deepcopy(invite)
+                for invite in self._candidate_invites.values()
+                if invite.assessment_id == assessment_id
+            ]
+            invites.sort(key=lambda item: item.created_at)
+            return invites
