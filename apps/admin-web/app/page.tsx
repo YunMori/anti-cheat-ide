@@ -2,6 +2,14 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  Button,
+  Card,
+  Field,
+  Input,
+  StateCard,
+  ThemeToggle,
+} from "@ide/ui";
 import { ManagementDesk } from "./management-desk";
 
 type AdminUser = {
@@ -37,43 +45,71 @@ export default function Home() {
   }
 
   return (
-    <main>
-      <header className="masthead">
-        <Link className="brand" href="/" aria-label="Session Review 홈">
-          <span className="brandMark" aria-hidden="true">SR</span>
-          <span>
-            <strong>Session Review</strong>
-            <small>근거 중심 검토 도구</small>
+    <main className="mx-auto w-[min(1180px,calc(100%-2rem))] pb-20">
+      <header className="flex items-center justify-between gap-4 py-6">
+        <Link
+          className="flex items-center gap-3 text-text no-underline"
+          href="/"
+          aria-label="Session Review 홈"
+        >
+          <span
+            className="flex size-9 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-fg"
+            aria-hidden="true"
+          >
+            SR
+          </span>
+          <span className="flex flex-col leading-tight">
+            <strong className="text-sm font-bold">Session Review</strong>
+            <small className="text-xs text-muted">근거 중심 검토 도구</small>
           </span>
         </Link>
-        <span className="environment">
-          {auth.status === "authenticated"
-            ? `${auth.user.display_name} · ${auth.user.role}`
-            : "관리자 전용 · MVP"}
-        </span>
+        <div className="flex items-center gap-3">
+          <span className="hidden text-xs text-muted sm:inline">
+            {auth.status === "authenticated"
+              ? `${auth.user.display_name} · ${auth.user.role}`
+              : "관리자 전용 · MVP"}
+          </span>
+          <ThemeToggle />
+        </div>
       </header>
 
-      {auth.status === "loading" && <LoadingState />}
+      {auth.status === "loading" && (
+        <StateCard tone="loading" title="관리자 인증을 확인하는 중입니다" description="잠시만 기다려 주세요." />
+      )}
       {auth.status === "anonymous" && (
-        <AuthPanel onAuthenticated={(user) => setAuth({ status: "authenticated", user })} />
+        <AuthPanel
+          onAuthenticated={(user) => setAuth({ status: "authenticated", user })}
+        />
       )}
 
       {auth.status === "authenticated" && auth.user.role && (
         <>
-          <div className="searchSection">
-            <button className="secondaryButton" type="button" onClick={() => void handleLogout()}>
+          <div className="mb-4 flex justify-end">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => void handleLogout()}
+            >
               로그아웃
-            </button>
+            </Button>
           </div>
 
           <ManagementDesk role={auth.user.role} />
 
-          <aside className="policy" aria-label="검토 정책">
-            <span className="policyIcon" aria-hidden="true">!</span>
-            <p>
-              <strong>자동 탈락 금지</strong>
-              탐지 점수만으로 응시자를 탈락시키지 않습니다. 신호별 근거와 시험 맥락을 사람이
-              검토해야 합니다.
+          <aside
+            className="mt-8 flex items-start gap-3 rounded-xl border-l-4 border-warning bg-risk-medium-soft p-4"
+            aria-label="검토 정책"
+          >
+            <span
+              className="flex size-6 shrink-0 items-center justify-center rounded-full bg-warning font-bold text-white"
+              aria-hidden="true"
+            >
+              !
+            </span>
+            <p className="text-sm text-text">
+              <strong className="mr-1 font-bold">자동 탈락 금지.</strong>
+              탐지 점수만으로 응시자를 탈락시키지 않습니다. 신호별 근거와 시험
+              맥락을 사람이 검토해야 합니다.
             </p>
           </aside>
         </>
@@ -140,52 +176,60 @@ function AuthPanel({
   }
 
   return (
-    <section className="searchSection" aria-labelledby="auth-title">
-      <div className="sectionIntro">
-        <p className="eyebrow">Admin access</p>
-        <h1 id="auth-title">{mode === "login" ? "관리자 로그인" : "관리자 가입 요청"}</h1>
-        <p>
-          첫 가입자는 자동 admin으로 승인됩니다. 이후 가입자는 기존 admin 승인이 필요합니다.
+    <section aria-labelledby="auth-title" className="mx-auto max-w-md">
+      <div className="mb-4 space-y-1 text-center">
+        <p className="text-xs font-bold uppercase tracking-wider text-accent">
+          Admin access
+        </p>
+        <h1 id="auth-title" className="text-2xl font-bold text-text">
+          {mode === "login" ? "관리자 로그인" : "관리자 가입 요청"}
+        </h1>
+        <p className="text-sm text-muted">
+          첫 가입자는 자동 admin으로 승인됩니다. 이후 가입자는 기존 admin 승인이
+          필요합니다.
         </p>
       </div>
-      <form className="searchForm" onSubmit={submit}>
-        {mode === "signup" && (
-          <>
-            <label htmlFor="display-name">이름</label>
-            <input id="display-name" name="displayName" required placeholder="홍길동" />
-          </>
-        )}
-        <label htmlFor="admin-email">이메일</label>
-        <input id="admin-email" name="email" required type="email" placeholder="admin@example.com" />
-        <label htmlFor="admin-password">비밀번호</label>
-        <input id="admin-password" name="password" required type="password" minLength={8} />
-        <div className="searchControls">
-          <button type="submit" disabled={busy}>
-            {busy ? "처리 중..." : mode === "login" ? "로그인" : "가입 요청"}
-          </button>
-          <button
-            className="secondaryButton"
-            type="button"
-            onClick={() => {
-              setNotice("");
-              setMode(mode === "login" ? "signup" : "login");
-            }}
-          >
-            {mode === "login" ? "가입 요청" : "로그인으로 돌아가기"}
-          </button>
-        </div>
-        {notice && <p id="session-help">{notice}</p>}
-      </form>
+      <Card className="p-6">
+        <form className="space-y-4" onSubmit={submit}>
+          {mode === "signup" && (
+            <Field label="이름" htmlFor="display-name">
+              <Input id="display-name" name="displayName" required placeholder="홍길동" />
+            </Field>
+          )}
+          <Field label="이메일" htmlFor="admin-email">
+            <Input
+              id="admin-email"
+              name="email"
+              required
+              type="email"
+              placeholder="admin@example.com"
+            />
+          </Field>
+          <Field label="비밀번호" htmlFor="admin-password">
+            <Input id="admin-password" name="password" required type="password" minLength={8} />
+          </Field>
+          <div className="flex flex-wrap gap-2">
+            <Button type="submit" disabled={busy}>
+              {busy ? "처리 중…" : mode === "login" ? "로그인" : "가입 요청"}
+            </Button>
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={() => {
+                setNotice("");
+                setMode(mode === "login" ? "signup" : "login");
+              }}
+            >
+              {mode === "login" ? "가입 요청" : "로그인으로 돌아가기"}
+            </Button>
+          </div>
+          {notice && (
+            <p role="status" className="text-sm text-muted">
+              {notice}
+            </p>
+          )}
+        </form>
+      </Card>
     </section>
-  );
-}
-
-function LoadingState() {
-  return (
-    <div className="stateCard">
-      <span className="loader" aria-hidden="true" />
-      <h2>관리자 인증을 확인하는 중입니다</h2>
-      <p>잠시만 기다려 주세요.</p>
-    </div>
   );
 }
