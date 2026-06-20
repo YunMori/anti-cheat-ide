@@ -32,10 +32,13 @@ export default function AntiCheatIDE() {
     selectLanguage,
     refreshProblems,
   } = useSession(sessionId, addAlert);
+  const [finished, setFinished] = useState(false);
+  const isFinished = finished || sessionInfo?.status === "finished";
   const { transport, editorRevision, handleEditorDidMount, flush } =
-    useEventCapture(sessionId);
+    useEventCapture(isFinished ? "" : sessionId);
 
   const [submitting, setSubmitting] = useState(false);
+  const [finishing, setFinishing] = useState(false);
   const [submission, setSubmission] = useState<SubmissionAccepted | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
@@ -108,6 +111,33 @@ export default function AntiCheatIDE() {
     sessionId,
   ]);
 
+  const finishExam = useCallback(async () => {
+    if (
+      typeof window !== "undefined" &&
+      !window.confirm(
+        "응시를 종료하시겠습니까? 종료 후에는 제출·수정할 수 없습니다.",
+      )
+    ) {
+      return;
+    }
+    setFinishing(true);
+    try {
+      await flush();
+      const response = await fetch(
+        `${PLATFORM_API_URL}/sessions/${encodeURIComponent(sessionId)}/finish`,
+        { method: "POST" },
+      );
+      if (!response.ok) {
+        throw new Error(`응시 종료 요청이 HTTP ${response.status}로 실패했습니다.`);
+      }
+      setFinished(true);
+    } catch (error) {
+      addAlert(error instanceof Error ? error.message : "응시 종료에 실패했습니다.");
+    } finally {
+      setFinishing(false);
+    }
+  }, [addAlert, flush, sessionId]);
+
   if (!sessionId) {
     return (
       <InviteScreen
@@ -117,6 +147,10 @@ export default function AntiCheatIDE() {
         onRedeem={() => void redeemInvite()}
       />
     );
+  }
+
+  if (isFinished) {
+    return <FinishedScreen candidateId={sessionInfo?.candidate_id} />;
   }
 
   return (
@@ -130,8 +164,10 @@ export default function AntiCheatIDE() {
         transport={transport}
         problem={problem}
         submitting={submitting}
+        finishing={finishing}
         onFlush={() => void flushEvents()}
         onSubmit={() => void submitCode()}
+        onFinish={() => void finishExam()}
       />
 
       <div className="flex flex-1 overflow-hidden">
@@ -165,6 +201,27 @@ export default function AntiCheatIDE() {
         </div>
         <div>Candidate Event Client v1.0</div>
       </footer>
+    </main>
+  );
+}
+
+function FinishedScreen({ candidateId }: { candidateId?: string }) {
+  return (
+    <main className="flex h-screen flex-col items-center justify-center bg-gray-900 px-6 font-sans text-white">
+      <div className="w-full max-w-md rounded-2xl border border-gray-700 bg-gray-800 p-10 text-center shadow-2xl">
+        <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-green-500/20 text-3xl text-green-400">
+          ✓
+        </div>
+        <h1 className="text-2xl font-bold">응시가 종료되었습니다</h1>
+        <p className="mt-3 text-sm leading-relaxed text-gray-400">
+          제출과 코드 수정이 더 이상 불가능합니다. 창을 닫으셔도 됩니다.
+        </p>
+        {candidateId && (
+          <p className="mt-6 font-mono text-xs text-gray-500">
+            Candidate: {candidateId}
+          </p>
+        )}
+      </div>
     </main>
   );
 }

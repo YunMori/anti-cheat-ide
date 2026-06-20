@@ -519,12 +519,8 @@ function InviteForm({
 
 function statusLabel(participant: ParticipantStatus): string {
   if (!participant.redeemed) return "초대됨";
-  if (
-    participant.session_status === "submitted" ||
-    participant.session_status === "finished"
-  ) {
-    return "제출 완료";
-  }
+  if (participant.session_status === "finished") return "응시 종료";
+  if (participant.session_status === "submitted") return "제출 완료";
   return "응시 중";
 }
 

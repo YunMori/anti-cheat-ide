@@ -8,7 +8,7 @@ from __future__ import annotations
 from fastapi import APIRouter, HTTPException, Request, status
 import httpx
 
-from ..dependencies import RepositoryDependency, new_id, require_session
+from ..dependencies import RepositoryDependency, new_id, require_active_session
 from ..models import (
     EventBatch,
     EventBatchAccepted,
@@ -31,7 +31,7 @@ def ingest_session_events(
     repository: RepositoryDependency,
     request: Request,
 ) -> EventBatchAccepted:
-    require_session(repository, session_id)
+    require_active_session(repository, session_id)
     if payload.session_id != session_id:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
