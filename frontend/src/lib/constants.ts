@@ -46,10 +46,10 @@ export const STATUS_LABELS: Record<TransportStatus, string> = {
 };
 
 export const STATUS_COLORS: Record<TransportStatus, string> = {
-  idle: "text-gray-400",
-  queued: "text-yellow-400",
-  sending: "text-cyan-400",
-  synced: "text-green-400",
-  retrying: "text-orange-400",
-  error: "text-red-400",
+  idle: "text-muted",
+  queued: "text-warning",
+  sending: "text-accent",
+  synced: "text-success",
+  retrying: "text-warning",
+  error: "text-danger",
 };
