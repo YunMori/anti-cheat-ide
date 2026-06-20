@@ -417,6 +417,24 @@ class PostgresPlatformRepository:
             )
             return updated
 
+    def list_candidate_invites(
+        self, assessment_id: str
+    ) -> list[CandidateInvite]:
+        with self._engine.begin() as conn:
+            payloads = (
+                conn.execute(
+                    select(candidate_invites.c.payload).where(
+                        candidate_invites.c.payload["assessment_id"].astext
+                        == assessment_id
+                    )
+                )
+                .scalars()
+                .all()
+            )
+        invites = [CandidateInvite.model_validate(p) for p in payloads]
+        invites.sort(key=lambda item: item.created_at)
+        return invites
+
     def _get_admin_user(self, where_clause) -> AdminUserRecord | None:
         with self._engine.begin() as conn:
             row = conn.execute(select(admin_users).where(where_clause)).mappings().first()

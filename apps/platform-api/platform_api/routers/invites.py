@@ -7,6 +7,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from ..dependencies import (
+    CurrentAdmin,
     RepositoryDependency,
     build_invite_url,
     new_id,
@@ -19,9 +20,11 @@ from ..models import (
     CandidateInviteCreate,
     CandidateInvitePreview,
     CandidateInviteRedeemed,
+    ParticipantStatus,
     Session,
     utc_now,
 )
+from ..progress import compute_problem_status
 
 router = APIRouter(tags=["invites"])
 
@@ -60,6 +63,59 @@ def create_candidate_invite(
         created_by_user_id=current_user.id if current_user else "auth-disabled",
     )
     return repository.create_candidate_invite(invite)
+
+
+@router.get(
+    "/assessments/{assessment_id}/participants",
+    response_model=list[ParticipantStatus],
+)
+def list_assessment_participants(
+    assessment_id: str,
+    repository: RepositoryDependency,
+    current_user: CurrentAdmin,
+) -> list[ParticipantStatus]:
+    """초대한 참가자별 응시 현황(상태·풀이 진행·위험) 집계. admin·reviewer 공용."""
+    del current_user
+    if repository.get_assessment(assessment_id) is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="assessment not found",
+        )
+    problems = repository.list_problems(assessment_id)
+    total_problems = len(problems)
+    rows: list[ParticipantStatus] = []
+    for invite in repository.list_candidate_invites(assessment_id):
+        session_status: str | None = None
+        solved_count = 0
+        risk_score: float | None = None
+        review_recommended: bool | None = None
+        if invite.session_id is not None:
+            session = repository.get_session(invite.session_id)
+            if session is not None:
+                session_status = session.status
+                statuses = compute_problem_status(repository, session, problems)
+                solved_count = sum(
+                    1 for value in statuses.values() if value == "solved"
+                )
+            risk = repository.get_risk_assessment(invite.session_id)
+            if risk is not None:
+                risk_score = risk.risk_score
+                review_recommended = risk.review_recommended
+        rows.append(
+            ParticipantStatus(
+                candidate_id=invite.candidate_id,
+                invited_at=invite.created_at,
+                expires_at=invite.expires_at,
+                redeemed=invite.used_at is not None,
+                session_id=invite.session_id,
+                session_status=session_status,
+                risk_score=risk_score,
+                review_recommended=review_recommended,
+                solved_count=solved_count,
+                total_problems=total_problems,
+            )
+        )
+    return rows
 
 
 @router.get("/invites/{token}", response_model=CandidateInvitePreview)
