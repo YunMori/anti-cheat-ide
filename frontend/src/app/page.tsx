@@ -2,7 +2,8 @@
 
 import { useCallback, useState } from "react";
 
-import { AlertStack } from "@/components/AlertStack";
+import { AlertStack, Card } from "@ide/ui";
+
 import { EditorPane } from "@/components/EditorPane";
 import { IdeHeader } from "@/components/IdeHeader";
 import { InviteScreen } from "@/components/InviteScreen";
@@ -154,7 +155,7 @@ export default function AntiCheatIDE() {
   }
 
   return (
-    <main className="flex h-screen flex-col bg-gray-900 font-sans text-white">
+    <main className="flex h-screen flex-col bg-bg text-text">
       <AlertStack alerts={alerts} />
 
       <IdeHeader
@@ -192,8 +193,8 @@ export default function AntiCheatIDE() {
         />
       </div>
 
-      <footer className="flex h-8 items-center justify-between border-t border-gray-800 bg-gray-900 px-4 text-[10px] text-gray-600">
-        <div className="flex gap-4">
+      <footer className="flex h-8 items-center justify-between border-t border-border bg-surface px-4 text-[10px] text-muted">
+        <div className="hidden gap-4 sm:flex">
           <span>Session: {sessionId || "not-configured"}</span>
           <span>Candidate: {sessionInfo?.candidate_id ?? "unknown"}</span>
           <span>Client: {transport.clientId.slice(0, 8)}</span>
@@ -207,21 +208,21 @@ export default function AntiCheatIDE() {
 
 function FinishedScreen({ candidateId }: { candidateId?: string }) {
   return (
-    <main className="flex h-screen flex-col items-center justify-center bg-gray-900 px-6 font-sans text-white">
-      <div className="w-full max-w-md rounded-2xl border border-gray-700 bg-gray-800 p-10 text-center shadow-2xl">
-        <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-green-500/20 text-3xl text-green-400">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-bg px-6 text-text">
+      <Card className="w-full max-w-md p-10 text-center">
+        <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-full bg-risk-low-soft text-3xl text-success">
           ✓
         </div>
         <h1 className="text-2xl font-bold">응시가 종료되었습니다</h1>
-        <p className="mt-3 text-sm leading-relaxed text-gray-400">
+        <p className="mt-3 text-sm leading-relaxed text-muted">
           제출과 코드 수정이 더 이상 불가능합니다. 창을 닫으셔도 됩니다.
         </p>
         {candidateId && (
-          <p className="mt-6 font-mono text-xs text-gray-500">
+          <p className="mt-6 font-mono text-xs text-muted">
             Candidate: {candidateId}
           </p>
         )}
-      </div>
+      </Card>
     </main>
   );
 }
