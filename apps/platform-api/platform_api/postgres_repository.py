@@ -230,6 +230,30 @@ class PostgresPlatformRepository:
     def get_session(self, session_id: str) -> Session | None:
         return self._get_payload(sessions, session_id, Session)
 
+    def finish_session(
+        self, session_id: str, finished_at: datetime
+    ) -> Session | None:
+        with self._engine.begin() as conn:
+            row = conn.execute(
+                select(sessions.c.payload)
+                .where(sessions.c.id == session_id)
+                .with_for_update()
+            ).scalar_one_or_none()
+            if row is None:
+                return None
+            session = Session.model_validate(row)
+            if session.status == "finished":
+                return session
+            updated = session.model_copy(
+                update={"status": "finished", "finished_at": finished_at}
+            )
+            conn.execute(
+                update(sessions)
+                .where(sessions.c.id == session_id)
+                .values(payload=updated.model_dump(mode="json"))
+            )
+            return updated
+
     def append_event_batch(self, batch: EventBatch) -> int:
         with self._engine.begin() as conn:
             row = conn.execute(

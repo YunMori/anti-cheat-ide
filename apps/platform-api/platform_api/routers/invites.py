@@ -129,12 +129,18 @@ def preview_candidate_invite(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="assessment not found",
         )
+    session_status = None
+    if invite.session_id is not None:
+        session = repository.get_session(invite.session_id)
+        session_status = session.status if session else None
     return CandidateInvitePreview(
         assessment_id=assessment.id,
         assessment_title=assessment.title,
         candidate_id=invite.candidate_id,
         expires_at=invite.expires_at,
         used=invite.used_at is not None,
+        session_id=invite.session_id,
+        session_status=session_status,
     )
 
 

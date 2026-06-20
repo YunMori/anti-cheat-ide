@@ -202,6 +202,8 @@ class CandidateInvitePreview(StrictModel):
     candidate_id: str
     expires_at: datetime
     used: bool
+    session_id: str | None = None
+    session_status: str | None = None
 
 
 class CandidateInviteRedeemed(StrictModel):

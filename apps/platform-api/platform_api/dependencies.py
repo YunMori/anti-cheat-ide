@@ -122,3 +122,16 @@ def require_session(repository: PlatformRepository, session_id: str) -> Session:
             detail="session not found",
         )
     return session
+
+
+def require_active_session(
+    repository: PlatformRepository, session_id: str
+) -> Session:
+    """종료되지 않은 세션만 통과. 종료된 세션은 409(읽기전용)."""
+    session = require_session(repository, session_id)
+    if session.status == "finished":
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="session already finished",
+        )
+    return session

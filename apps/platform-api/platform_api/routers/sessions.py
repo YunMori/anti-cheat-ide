@@ -64,6 +64,21 @@ def get_session(session_id: str, repository: RepositoryDependency) -> Session:
     return require_session(repository, session_id)
 
 
+@router.post("/sessions/{session_id}/finish", response_model=Session)
+def finish_session_endpoint(
+    session_id: str, repository: RepositoryDependency
+) -> Session:
+    """응시자가 시험을 종료한다. 이후 제출/이벤트는 409로 거부된다(멱등)."""
+    require_session(repository, session_id)
+    finished = repository.finish_session(session_id, utc_now())
+    if finished is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="session not found",
+        )
+    return finished
+
+
 @router.get(
     "/sessions/{session_id}/problems",
     response_model=list[CandidateProblemSummary],

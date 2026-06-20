@@ -59,6 +59,10 @@ class PlatformRepository(Protocol):
 
     def get_session(self, session_id: str) -> Session | None: ...
 
+    def finish_session(
+        self, session_id: str, finished_at
+    ) -> Session | None: ...
+
     def append_event_batch(self, batch: EventBatch) -> int: ...
 
     def append_submission(self, submission: Submission) -> Submission: ...
@@ -218,6 +222,20 @@ class InMemoryPlatformRepository:
         with self._lock:
             session = self._sessions.get(session_id)
             return deepcopy(session) if session else None
+
+    def finish_session(
+        self, session_id: str, finished_at
+    ) -> Session | None:
+        with self._lock:
+            session = self._sessions.get(session_id)
+            if session is None:
+                return None
+            if session.status != "finished":
+                session = session.model_copy(
+                    update={"status": "finished", "finished_at": finished_at}
+                )
+                self._sessions[session_id] = session
+            return deepcopy(session)
 
     def append_event_batch(self, batch: EventBatch) -> int:
         with self._lock:

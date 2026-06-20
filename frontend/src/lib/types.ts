@@ -42,6 +42,8 @@ export interface InvitePreview {
   candidate_id: string;
   expires_at: string;
   used: boolean;
+  session_id?: string | null;
+  session_status?: string | null;
 }
 
 export interface JudgeResult {
