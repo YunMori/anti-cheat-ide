@@ -1,5 +1,12 @@
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
 
-const nextConfig: NextConfig = {};
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "1",
+});
 
-export default nextConfig;
+const nextConfig: NextConfig = {
+  transpilePackages: ["@ide/ui"],
+};
+
+export default withBundleAnalyzer(nextConfig);

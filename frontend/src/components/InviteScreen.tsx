@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Card, StateCard, ThemeToggle } from "@ide/ui";
+
 import type { InvitePreview } from "../lib/types";
 
 interface InviteScreenProps {
@@ -16,49 +18,58 @@ export function InviteScreen({
   onRedeem,
 }: InviteScreenProps) {
   return (
-    <main className="flex h-screen items-center justify-center bg-gray-900 p-8 font-sans text-white">
-      <section className="w-full max-w-xl rounded-2xl border border-gray-700 bg-gray-800 p-8 shadow-2xl">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-500 font-bold text-gray-900">
-            AS
+    <main className="flex min-h-screen items-center justify-center bg-bg p-4 text-text sm:p-8">
+      <Card className="w-full max-w-xl p-6 sm:p-8">
+        <div className="mb-6 flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 items-center justify-center rounded-lg bg-primary font-bold text-primary-fg">
+              AS
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-accent">
+                Candidate invite
+              </p>
+              <h1 className="text-2xl font-bold">코딩 테스트 입장</h1>
+            </div>
           </div>
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-cyan-400">
-              Candidate invite
-            </p>
-            <h1 className="text-2xl font-bold">코딩 테스트 입장</h1>
-          </div>
+          <ThemeToggle />
         </div>
 
         {invite ? (
-          <div className="space-y-4 text-sm text-gray-300">
+          <div className="space-y-4 text-sm text-muted">
             <p>
-              <strong className="text-white">{invite.assessment_title}</strong> 시험에
-              응시합니다.
+              <strong className="text-text">{invite.assessment_title}</strong>{" "}
+              시험에 응시합니다.
             </p>
-            <div className="rounded-lg border border-gray-700 bg-gray-900 p-4 font-mono text-xs">
+            <div className="rounded-lg border border-border bg-surface-2 p-4 font-mono text-xs text-text">
               <p>Candidate: {invite.candidate_id}</p>
               <p>Expires: {new Date(invite.expires_at).toLocaleString()}</p>
             </div>
-            <button
-              type="button"
+            <Button
+              size="lg"
+              className="w-full"
               disabled={redeeming || invite.used || Boolean(inviteError)}
               onClick={onRedeem}
-              className="w-full rounded-md bg-cyan-600 px-5 py-3 font-bold text-gray-900 shadow-lg transition-all hover:bg-cyan-500 disabled:cursor-not-allowed disabled:bg-gray-600"
             >
-              {redeeming ? "세션 생성 중..." : "시험 시작"}
-            </button>
+              {redeeming ? "세션 생성 중…" : "시험 시작"}
+            </Button>
           </div>
-        ) : (
-          <p className="text-sm text-gray-400">초대 링크를 확인하는 중입니다.</p>
+        ) : inviteError ? null : (
+          <StateCard
+            tone="loading"
+            title="초대 링크를 확인하는 중입니다"
+          />
         )}
 
         {inviteError && (
-          <div className="mt-5 rounded-lg border border-red-900 bg-red-950/40 p-4 text-sm text-red-300">
+          <div
+            role="alert"
+            className="mt-5 rounded-lg border border-danger/40 bg-risk-high-soft p-4 text-sm text-danger"
+          >
             {inviteError}
           </div>
         )}
-      </section>
+      </Card>
     </main>
   );
 }

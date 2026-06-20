@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, ThemeToggle } from "@ide/ui";
+
 import { STATUS_COLORS, STATUS_LABELS } from "../lib/constants";
 import type { TransportState } from "../lib/session-event-client";
 import type { CandidateProblem, SessionInfo } from "../lib/types";
@@ -30,72 +32,72 @@ export function IdeHeader({
   onFinish,
 }: IdeHeaderProps) {
   return (
-    <header className="flex items-center justify-between border-b border-gray-700 bg-gray-800 p-4 shadow-md">
+    <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-surface px-4 py-3 shadow-[var(--shadow-card)]">
       <div className="flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500 font-bold text-gray-900">
+        <div className="flex size-8 items-center justify-center rounded-lg bg-primary font-bold text-primary-fg">
           AS
         </div>
-        <h1 className="text-xl font-bold tracking-tight">
-          Anti-Cheat <span className="text-cyan-400">Web IDE</span>
+        <h1 className="text-lg font-bold tracking-tight text-text">
+          Anti-Cheat <span className="text-accent">Web IDE</span>
         </h1>
       </div>
 
-      <div className="flex items-center gap-5">
-        <div className="hidden flex-col items-end text-xs lg:flex">
-          <span className="text-[10px] font-bold uppercase text-gray-500">
+      <div className="flex items-center gap-4">
+        <dl className="hidden flex-col items-end text-xs sm:flex">
+          <dt className="text-[10px] font-bold uppercase text-muted">
             Candidate
-          </span>
-          <strong className="font-mono text-cyan-300">
+          </dt>
+          <dd className="font-mono text-text">
             {sessionInfo?.candidate_id ?? "확인 중"}
-          </strong>
-        </div>
-        <div className="h-10 w-px bg-gray-700" />
-        <div className="flex flex-col items-end">
-          <span className="text-[10px] font-bold uppercase text-gray-500">
+          </dd>
+        </dl>
+
+        <div className="hidden h-9 w-px bg-border md:block" />
+
+        <dl className="hidden flex-col items-end md:flex">
+          <dt className="text-[10px] font-bold uppercase text-muted">
             Editor revision
-          </span>
-          <span className="font-mono text-xl font-bold text-cyan-400">
+          </dt>
+          <dd className="font-mono text-lg font-bold text-accent">
             {editorRevision}
-          </span>
-        </div>
-        <div className="h-10 w-px bg-gray-700" />
-        <div className="flex flex-col gap-1 text-xs">
-          <span
-            className={online ? "text-green-400" : "text-red-400"}
-            title="브라우저 네트워크 상태"
-          >
+          </dd>
+        </dl>
+
+        <div className="hidden h-9 w-px bg-border lg:block" />
+
+        <div
+          className="hidden flex-col gap-0.5 text-xs lg:flex"
+          aria-live="polite"
+        >
+          <span className={online ? "text-success" : "text-danger"}>
             Platform: {online ? "Online" : "Offline"}
           </span>
-          <span
-            className={STATUS_COLORS[transport.status]}
-            title={transport.lastError}
-          >
+          <span className={STATUS_COLORS[transport.status]} title={transport.lastError}>
             Events: {STATUS_LABELS[transport.status]} ({transport.pendingEvents})
           </span>
         </div>
-        <button
-          type="button"
-          onClick={onFlush}
-          className="rounded-md bg-cyan-600 px-5 py-2.5 font-bold text-gray-900 shadow-lg transition-all hover:bg-cyan-500 active:scale-95"
-        >
-          SEND EVENTS
-        </button>
-        <button
-          type="button"
+
+        <ThemeToggle />
+
+        <Button variant="secondary" size="sm" onClick={onFlush}>
+          이벤트 전송
+        </Button>
+        <Button
+          variant="success"
+          size="sm"
           disabled={submitting || !problem}
           onClick={onSubmit}
-          className="rounded-md bg-green-500 px-5 py-2.5 font-bold text-gray-900 shadow-lg transition-all hover:bg-green-400 disabled:cursor-not-allowed disabled:bg-gray-600"
         >
-          {submitting ? "SUBMITTING" : "SUBMIT"}
-        </button>
-        <button
-          type="button"
+          {submitting ? "제출 중…" : "제출"}
+        </Button>
+        <Button
+          variant="danger"
+          size="sm"
           disabled={finishing}
           onClick={onFinish}
-          className="rounded-md bg-red-600 px-5 py-2.5 font-bold text-white shadow-lg transition-all hover:bg-red-500 active:scale-95 disabled:cursor-not-allowed disabled:bg-gray-600"
         >
-          {finishing ? "종료 중..." : "응시 종료"}
-        </button>
+          {finishing ? "종료 중…" : "응시 종료"}
+        </Button>
       </div>
     </header>
   );
