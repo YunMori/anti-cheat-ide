@@ -101,6 +101,23 @@
   color-scheme: dark;
 }
 
+/*
+ * 강조색(accent) 테마. <html data-accent="blue|violet">로 전환한다.
+ * 기본값(teal)은 위 :root / .dark의 --accent를 그대로 사용한다.
+ */
+:root[data-accent="blue"] {
+  --accent: #2f6fc7;
+}
+.dark[data-accent="blue"] {
+  --accent: #5d97e6;
+}
+:root[data-accent="violet"] {
+  --accent: #6d52b8;
+}
+.dark[data-accent="violet"] {
+  --accent: #9a82e0;
+}
+
 @keyframes toast-in {
   from {
     opacity: 0;
