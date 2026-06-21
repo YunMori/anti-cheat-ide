@@ -202,6 +202,15 @@ class PostgresPlatformRepository:
             )
         return problem
 
+    def update_problem(self, problem: Problem) -> Problem:
+        with self._engine.begin() as conn:
+            conn.execute(
+                update(problems)
+                .where(problems.c.id == problem.id)
+                .values(payload=problem.model_dump(mode="json"))
+            )
+        return problem
+
     def get_problem(self, problem_id: str) -> Problem | None:
         return self._get_payload(problems, problem_id, Problem)
 

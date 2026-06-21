@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;}
+  body{background:#d7dce4;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  :root{
+    --gallery:#d7dce4; --cap:#5a6577;
+    --bg:#f3f5fa; --surface:#ffffff; --surface-2:#eef2f8; --surface-3:#e5ebf3;
+    --text:#1a2233; --text-2:#5a6577; --text-3:#8b94a4;
+    --border:#dde3ec; --border-strong:#c7d0dd;
+    --primary:#1b3a5b; --primary-2:#234e7a; --primary-soft:rgba(27,58,91,.09); --primary-fg:#ffffff;
+    --accent:#0e8aa3;
+    --low:#1c794a; --low-soft:#e8f5ee; --med:#92620a; --med-soft:#fbf1da; --high:#b23b32; --high-soft:#fbedeb;
+  }
+  [data-theme="dark"]{
+    --gallery:#070a0f; --cap:#7c8798;
+    --bg:#0f141c; --surface:#161d28; --surface-2:#1c2531; --surface-3:#26313f;
+    --text:#e8edf4; --text-2:#9aa6b6; --text-3:#69748450;
+    --text-3:#6b7686;
+    --border:#27313e; --border-strong:#3a4654;
+    --primary:#3a6ea3; --primary-2:#4880b8; --primary-soft:rgba(86,140,196,.16); --primary-fg:#ffffff;
+    --accent:#34b4cc;
+    --low:#55c08b; --low-soft:rgba(31,122,77,.18); --med:#d6a23e; --med-soft:rgba(148,98,10,.2); --high:#e07b6f; --high-soft:rgba(178,59,50,.2);
+  }
+  [data-accent="teal"]{--accent:#0e8aa3;} [data-theme="dark"][data-accent="teal"]{--accent:#34b4cc;}
+  [data-accent="blue"]{--accent:#2f6fc7;} [data-theme="dark"][data-accent="blue"]{--accent:#5d97e6;}
+  [data-accent="violet"]{--accent:#6d52b8;} [data-theme="dark"][data-accent="violet"]{--accent:#9a82e0;}
+  ::selection{background:rgba(14,138,163,.22);}
+</style>
+</helmet>
+
+<div data-theme="{{ theme }}" data-accent="{{ accent }}" style="width:max-content;min-width:100%;min-height:100vh;box-sizing:border-box;padding:56px;background:var(--gallery);font-family:'IBM Plex Sans KR',system-ui,sans-serif;color:var(--text);">
+
+  <div style="margin-bottom:44px;max-width:780px;">
+    <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);">Anti-Cheat Assessment · Session Review</p>
+    <h1 style="margin:0 0 10px;font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.15;">코딩 테스트 무결성 플랫폼</h1>
+    <p style="margin:0;font-size:14px;line-height:1.6;color:var(--cap);">응시자 응시 흐름과, 기능별로 분리된 관리자 콘솔. 오른쪽 Tweaks 패널에서 라이트/다크 테마와 강조색을 전환할 수 있습니다.</p>
+  </div>
+
+  <!-- ===================== 응시자 플로우 ===================== -->
+  <div style="margin-bottom:60px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <span style="width:26px;height:3px;border-radius:2px;background:var(--accent);"></span>
+      <span style="font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text);">응시자 플로우</span>
+      <span style="font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--cap);">CANDIDATE</span>
+    </div>
+    <div style="display:flex;gap:44px;align-items:flex-start;">
+
+      <!-- 입장 -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">입장 · 코딩 테스트 시작</p>
+        <div data-screen-label="응시자-입장" style="width:880px;height:600px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;align-items:center;justify-content:center;padding:40px;">
+          <div style="width:520px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:0 1px 2px rgba(20,30,48,.04),0 20px 50px rgba(20,30,48,.07);overflow:hidden;">
+            <div style="padding:30px 32px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;">
+              <div style="display:flex;gap:13px;align-items:center;">
+                <span style="width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:11px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:14px;letter-spacing:.02em;">AS</span>
+                <div>
+                  <p style="margin:0 0 3px;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);">Candidate invite</p>
+                  <h1 style="margin:0;font-size:23px;font-weight:700;letter-spacing:-.01em;">코딩 테스트 입장</h1>
+                </div>
+              </div>
+              <span style="width:36px;height:36px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);font-size:15px;">☾</span>
+            </div>
+            <div style="padding:26px 32px 32px;display:flex;flex-direction:column;gap:20px;">
+              <p style="margin:0;font-size:14px;line-height:1.6;color:var(--text-2);"><strong style="color:var(--text);font-weight:600;">2026 백엔드 개발자 코딩테스트</strong> 시험에 응시합니다. 시작 후에는 타이머가 흐르며 일시정지할 수 없습니다.</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:11px;overflow:hidden;">
+                <div style="background:var(--surface-2);padding:14px 16px;">
+                  <p style="margin:0 0 4px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);">Candidate</p>
+                  <p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);">candidate_20260001</p>
+                </div>
+                <div style="background:var(--surface-2);padding:14px 16px;">
+                  <p style="margin:0 0 4px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);">Expires</p>
+                  <p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);">06.21 18:00</p>
+                </div>
+              </div>
+              <div style="display:flex;gap:9px;align-items:flex-start;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);">
+                <span style="color:var(--accent);font-size:13px;line-height:1.5;">ⓘ</span>
+                <p style="margin:0;font-size:12px;line-height:1.55;color:var(--text-2);">키 입력·붙여넣기·포커스 전환이 무결성 검토용으로 기록됩니다. 클립보드 내용은 수집하지 않습니다.</p>
+              </div>
+              <button style="width:100%;height:50px;border:none;border-radius:11px;background:var(--primary);color:var(--primary-fg);font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">시험 시작 <span style="font-size:16px;">→</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IDE -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">코딩 IDE · Anti-Cheat Web IDE</p>
+        <div data-screen-label="응시자-IDE" style="width:1440px;height:860px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;flex-direction:column;">
+          <header style="display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--border);background:var(--surface);padding:0 18px;height:58px;flex:none;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:12px;">AS</span>
+              <h1 style="font-size:17px;font-weight:700;letter-spacing:-.01em;margin:0;">Anti-Cheat <span style="color:var(--accent);">Web IDE</span></h1>
+            </div>
+            <div style="display:flex;align-items:center;gap:18px;">
+              <div style="display:flex;flex-direction:column;align-items:flex-end;line-height:1.25;">
+                <span style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);">Candidate</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;">candidate_20260001</span>
+              </div>
+              <span style="width:1px;height:30px;background:var(--border);"></span>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;">
+                <span style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);">Editor rev</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:var(--accent);">142</span>
+              </div>
+              <span style="width:1px;height:30px;background:var(--border);"></span>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <span style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--low);"><span style="width:7px;height:7px;border-radius:50%;background:var(--low);"></span>Platform Online</span>
+                <span style="font-size:11.5px;color:var(--text-2);">Events 전송됨 (0)</span>
+              </div>
+              <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border);color:var(--text-2);font-size:14px;">☾</span>
+              <button style="height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;">이벤트 전송</button>
+              <button style="height:32px;padding:0 14px;border-radius:8px;border:none;background:var(--low);color:#fff;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;">제출</button>
+              <button style="height:32px;padding:0 14px;border-radius:8px;border:none;background:var(--high);color:#fff;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;">응시 종료</button>
+            </div>
+          </header>
+          <div style="flex:1;display:flex;overflow:hidden;min-height:0;">
+            <aside style="width:336px;flex:none;border-right:1px solid var(--border);background:var(--surface);padding:22px;overflow:auto;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+                <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);">문제 3개</span>
+                <button style="height:28px;padding:0 10px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);font-family:inherit;font-size:11px;cursor:pointer;">◀ 접기</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:26px;">
+                <div style="display:flex;gap:10px;align-items:center;border-radius:9px;padding:10px 12px;font-size:13.5px;font-weight:600;background:var(--primary-soft);color:var(--primary);"><span style="width:18px;height:18px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid currentColor;font-size:9px;"></span>두 수의 합</div>
+                <div style="display:flex;gap:10px;align-items:center;border-radius:9px;padding:10px 12px;font-size:13.5px;color:var(--text-2);"><span style="width:18px;height:18px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--low);color:#fff;font-size:10px;">✓</span>배열 정렬</div>
+                <div style="display:flex;gap:10px;align-items:center;border-radius:9px;padding:10px 12px;font-size:13.5px;color:var(--text-3);"><span style="width:18px;text-align:center;font-size:11px;">🔒</span>문제 3 (잠김)</div>
+              </div>
+              <div style="margin-bottom:14px;">
+                <span style="display:inline-flex;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;background:var(--primary-soft);color:var(--primary);">문제 1</span>
+                <h2 style="margin:10px 0 0;font-size:19px;font-weight:700;">두 수의 합</h2>
+              </div>
+              <p style="margin:0 0 16px;font-size:13.5px;line-height:1.65;color:var(--text-2);">두 정수 A와 B를 입력받아 A+B를 출력하는 프로그램을 작성하세요.</p>
+              <div style="border:1px solid var(--border);background:var(--surface-2);border-radius:10px;padding:13px 15px;margin-bottom:12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);">제한: 2000ms / 128MB</div>
+              <div style="border:1px solid var(--border);background:var(--surface-2);border-radius:10px;padding:14px 15px;margin-bottom:24px;font-family:'IBM Plex Mono',monospace;">
+                <strong style="display:block;margin-bottom:8px;color:var(--accent);font-size:11px;letter-spacing:.04em;">예제 1</strong>
+                <div style="font-size:12px;color:var(--text);">입력: 3 5</div>
+                <div style="font-size:12px;color:var(--text);margin-top:6px;">출력: 8</div>
+              </div>
+              <p style="margin:0 0 7px;font-size:11px;font-weight:600;color:var(--text-2);">풀이 언어</p>
+              <div style="display:flex;align-items:center;justify-content:space-between;height:38px;padding:0 12px;border:1px solid var(--border);border-radius:9px;background:var(--surface);font-size:13px;margin-bottom:18px;">Python 3.12 <span style="color:var(--text-3);">▾</span></div>
+              <div style="border-left:3px solid var(--med);background:var(--med-soft);border-radius:9px;padding:13px 15px;">
+                <h3 style="margin:0 0 7px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text);">안내</h3>
+                <p style="margin:0;font-size:11.5px;color:var(--text-2);line-height:1.55;">키 입력, 붙여넣기 횟수, 코드 변경 및 포커스 변경이 시험 무결성 검토를 위해 기록됩니다.</p>
+              </div>
+            </aside>
+            <div style="flex:1;background:#0e1420;display:flex;font-family:'IBM Plex Mono',monospace;font-size:14.5px;line-height:1.75;min-width:0;">
+              <div style="padding:20px 14px;text-align:right;color:#4a586b;user-select:none;">1<br>2<br>3<br>4<br>5<br>6<br>7</div>
+              <pre style="margin:0;padding:20px 16px;color:#d6deeb;overflow:auto;"><span style="color:#c792ea;">import</span> sys
+
+<span style="color:#c792ea;">def</span> <span style="color:#82aaff;">solve</span>():
+    a, b = <span style="color:#ffcb6b;">map</span>(<span style="color:#ffcb6b;">int</span>, <span style="color:#ffcb6b;">input</span>().split())
+    <span style="color:#ffcb6b;">print</span>(a + b)
+
+<span style="color:#82aaff;">solve</span>()</pre>
+            </div>
+          </div>
+          <footer style="height:30px;flex:none;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);background:var(--surface);padding:0 18px;font-size:10.5px;color:var(--text-3);font-family:'IBM Plex Mono',monospace;">
+            <div style="display:flex;gap:18px;"><span>Session: sess_8f2a…</span><span>Candidate: candidate_20260001</span><span>Client: 7b3c9e1a</span><span>Python 3.12</span></div>
+            <span>Candidate Event Client v1.0</span>
+          </footer>
+        </div>
+      </div>
+
+      <!-- 종료 -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">응시 종료</p>
+        <div data-screen-label="응시자-종료" style="width:760px;height:520px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;align-items:center;justify-content:center;padding:32px;">
+          <div style="width:440px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:0 20px 50px rgba(20,30,48,.07);padding:44px 40px;text-align:center;">
+            <div style="width:60px;height:60px;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--low-soft);color:var(--low);font-size:30px;">✓</div>
+            <h1 style="margin:0;font-size:23px;font-weight:700;">응시가 종료되었습니다</h1>
+            <p style="margin:14px 0 0;font-size:14px;line-height:1.65;color:var(--text-2);">제출과 코드 수정이 더 이상 불가능합니다. 창을 닫으셔도 됩니다.</p>
+            <div style="margin:26px 0 0;padding-top:22px;border-top:1px solid var(--border);">
+              <p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-3);">candidate_20260001 · sess_8f2a1c</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== 관리자 로그인 ===================== -->
+  <div style="margin-bottom:60px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <span style="width:26px;height:3px;border-radius:2px;background:var(--accent);"></span>
+      <span style="font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text);">관리자 인증</span>
+      <span style="font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--cap);">ADMIN ACCESS</span>
+    </div>
+    <div style="flex:none;">
+      <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">관리자 로그인</p>
+      <div data-screen-label="관리자-로그인" style="width:760px;height:560px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;align-items:center;justify-content:center;padding:32px;">
+        <div style="width:420px;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;margin-bottom:22px;">
+            <span style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:15px;margin-bottom:8px;">SR</span>
+            <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);">Admin access</p>
+            <h1 style="margin:0;font-size:23px;font-weight:700;">관리자 로그인</h1>
+            <p style="margin:4px 0 0;font-size:12.5px;line-height:1.55;color:var(--text-2);max-width:320px;">첫 가입자는 자동 admin으로 승인됩니다. 이후 가입자는 기존 admin 승인이 필요합니다.</p>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 20px 50px rgba(20,30,48,.07);padding:26px;">
+            <div style="display:flex;flex-direction:column;gap:18px;">
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <label style="font-size:11px;font-weight:600;color:var(--text-2);">이메일</label>
+                <input value="admin@example.com" style="width:100%;height:42px;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:0 13px;font-family:inherit;font-size:13.5px;color:var(--text);box-sizing:border-box;" />
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <label style="font-size:11px;font-weight:600;color:var(--text-2);">비밀번호</label>
+                <input type="password" value="password" style="width:100%;height:42px;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:0 13px;font-family:inherit;font-size:13.5px;color:var(--text);box-sizing:border-box;" />
+              </div>
+              <div style="display:flex;gap:10px;margin-top:2px;">
+                <button style="flex:1;height:44px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-fg);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">로그인</button>
+                <button style="height:44px;padding:0 18px;border:1px solid var(--border-strong);border-radius:10px;background:var(--surface);color:var(--text);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;">가입 요청</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== 시험 관리 (로그인 직후) ===================== -->
+  <div style="margin-bottom:60px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <span style="width:26px;height:3px;border-radius:2px;background:var(--accent);"></span>
+      <span style="font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text);">시험 관리 · 로그인 직후 진입</span>
+      <span style="font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--cap);">EXAM PICKER</span>
+    </div>
+    <div style="flex:none;">
+      <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">시험 관리 · 새로 만들거나 기존 시험에 입장</p>
+      <div data-screen-label="관리자-시험관리" style="width:1180px;height:780px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;flex-direction:column;">
+        <header style="height:60px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--surface);">
+          <div style="display:flex;gap:11px;align-items:center;">
+            <span style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:13px;">SR</span>
+            <span style="display:flex;flex-direction:column;line-height:1.3;"><strong style="font-size:13px;font-weight:700;">Session Review</strong><small style="font-size:10.5px;color:var(--text-3);">근거 중심 검토 도구</small></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);"><span style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--surface-3);font-size:11px;font-weight:600;color:var(--text);">김</span>김검토 · admin</span>
+            <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border);color:var(--text-2);font-size:14px;">☾</span>
+            <button style="height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;">로그아웃</button>
+          </div>
+        </header>
+        <div style="flex:1;overflow:auto;padding:30px 34px;min-height:0;">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:6px;">
+            <div>
+              <p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Exam management</p>
+              <h1 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-.01em;">시험 관리</h1>
+            </div>
+            <button style="height:42px;padding:0 18px;border:none;border-radius:10px;background:var(--primary);color:var(--primary-fg);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;"><span style="font-size:17px;line-height:1;">＋</span>새 시험 만들기</button>
+          </div>
+          <p style="margin:0 0 24px;font-size:13px;color:var(--text-2);">새 시험을 생성하거나 기존 시험에 입장해 대시보드·출제·모니터링을 이어서 진행합니다.</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+            <!-- 새 시험 만들기 카드 -->
+            <button style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:208px;border:2px dashed var(--border-strong);border-radius:14px;background:transparent;color:var(--text-2);font-family:inherit;cursor:pointer;padding:24px;">
+              <span style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--primary-soft);color:var(--primary);font-size:26px;line-height:1;">＋</span>
+              <span style="font-size:14px;font-weight:600;color:var(--text);">새 시험 만들기</span>
+              <span style="font-size:12px;color:var(--text-3);text-align:center;line-height:1.5;">제목·시간·출제 묶음을<br>처음부터 구성합니다</span>
+            </button>
+
+            <!-- 진행 중 (문제 잠김) -->
+            <div style="display:flex;flex-direction:column;min-height:208px;border:1px solid var(--border);border-radius:14px;background:var(--surface);overflow:hidden;box-shadow:0 1px 2px rgba(20,30,48,.04);">
+              <div style="flex:1;padding:20px 20px 16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--low-soft);color:var(--low);"><span style="width:6px;height:6px;border-radius:50%;background:var(--low);"></span>진행 중</span>
+                  <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--med);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>문제 잠김</span>
+                </div>
+                <h2 style="margin:0 0 6px;font-size:15.5px;font-weight:700;line-height:1.3;">2026 백엔드 개발자 코딩테스트</h2>
+                <p style="margin:0 0 14px;font-size:11.5px;color:var(--text-3);font-family:'IBM Plex Mono',monospace;">09:00–12:00 · KST</p>
+                <div style="display:flex;gap:18px;">
+                  <div><p style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em;">3</p><p style="margin:1px 0 0;font-size:10.5px;color:var(--text-3);">문제</p></div>
+                  <div><p style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em;">12</p><p style="margin:1px 0 0;font-size:10.5px;color:var(--text-3);">참가자</p></div>
+                  <div><p style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em;color:var(--accent);">4</p><p style="margin:1px 0 0;font-size:10.5px;color:var(--text-3);">응시 중</p></div>
+                </div>
+              </div>
+              <div style="border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);">
+                <span style="font-size:11.5px;color:var(--text-3);">방금 활동</span>
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--primary);">입장 <span style="font-size:14px;">→</span></span>
+              </div>
+            </div>
+
+            <!-- 시작 전 (편집 가능) -->
+            <div style="display:flex;flex-direction:column;min-height:208px;border:1px solid var(--border);border-radius:14px;background:var(--surface);overflow:hidden;box-shadow:0 1px 2px rgba(20,30,48,.04);">
+              <div style="flex:1;padding:20px 20px 16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--med-soft);color:var(--med);"><span style="width:6px;height:6px;border-radius:50%;background:var(--med);"></span>시작 전</span>
+                  <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--accent);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>출제 편집 가능</span>
+                </div>
+                <h2 style="margin:0 0 6px;font-size:15.5px;font-weight:700;line-height:1.3;">2026 신입 알고리즘 사전테스트</h2>
+                <p style="margin:0 0 14px;font-size:11.5px;color:var(--text-3);font-family:'IBM Plex Mono',monospace;">06.28 14:00 시작 예정</p>
+                <div style="display:flex;gap:18px;">
+                  <div><p style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em;">2</p><p style="margin:1px 0 0;font-size:10.5px;color:var(--text-3);">문제</p></div>
+                  <div><p style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em;">0</p><p style="margin:1px 0 0;font-size:10.5px;color:var(--text-3);">참가자</p></div>
+                  <div><p style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em;color:var(--text-3);">—</p><p style="margin:1px 0 0;font-size:10.5px;color:var(--text-3);">응시 중</p></div>
+                </div>
+              </div>
+              <div style="border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);">
+                <span style="font-size:11.5px;color:var(--text-3);">초안 작성 중</span>
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--primary);">입장 <span style="font-size:14px;">→</span></span>
+              </div>
+            </div>
+
+            <!-- 보관됨 -->
+            <div style="display:flex;flex-direction:column;min-height:208px;border:1px solid var(--border);border-radius:14px;background:var(--surface);overflow:hidden;box-shadow:0 1px 2px rgba(20,30,48,.04);opacity:.8;">
+              <div style="flex:1;padding:20px 20px 16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--surface-3);color:var(--text-3);">보관됨</span>
+                </div>
+                <h2 style="margin:0 0 6px;font-size:15.5px;font-weight:700;line-height:1.3;color:var(--text-2);">2025 프론트엔드 채용</h2>
+                <p style="margin:0 0 14px;font-size:11.5px;color:var(--text-3);font-family:'IBM Plex Mono',monospace;">2025.11.03 종료</p>
+                <div style="display:flex;gap:18px;">
+                  <div><p style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em;color:var(--text-2);">5</p><p style="margin:1px 0 0;font-size:10.5px;color:var(--text-3);">문제</p></div>
+                  <div><p style="margin:0;font-size:18px;font-weight:700;letter-spacing:-.02em;color:var(--text-2);">41</p><p style="margin:1px 0 0;font-size:10.5px;color:var(--text-3);">참가자</p></div>
+                </div>
+              </div>
+              <div style="border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);">
+                <span style="font-size:11.5px;color:var(--text-3);">읽기 전용</span>
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--text-2);">결과 보기 <span style="font-size:14px;">→</span></span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== 관리자 콘솔 ===================== -->
+  <div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <span style="width:26px;height:3px;border-radius:2px;background:var(--accent);"></span>
+      <span style="font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text);">관리자 콘솔 · 기능별 분리</span>
+      <span style="font-size:11px;font-weight:600;letter-spacing:.12em;color:var(--cap);">SESSION REVIEW</span>
+    </div>
+
+    <!-- row 1: 대시보드 + 시험 설정 -->
+    <div style="display:flex;gap:44px;align-items:flex-start;margin-bottom:48px;">
+
+      <!-- 대시보드 -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">대시보드 · 개요</p>
+        <div data-screen-label="관리자-대시보드" style="width:1180px;height:780px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;">
+          <!--SIDEBAR active=dash-->
+          <aside style="width:214px;flex:none;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;">
+            <div style="display:flex;gap:11px;align-items:center;padding:18px;border-bottom:1px solid var(--border);">
+              <span style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:13px;">SR</span>
+              <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0;"><strong style="font-size:13px;font-weight:700;white-space:nowrap;">Session Review</strong><small style="font-size:10.5px;color:var(--text-3);white-space:nowrap;">근거 중심 검토 도구</small></span>
+            </div>
+            <nav style="flex:1;display:flex;flex-direction:column;gap:2px;padding:14px 11px;">
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--primary);font-size:12.5px;font-weight:600;text-decoration:none;background:var(--primary-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>대시보드</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2"></circle></svg>시험 설정</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 4 12 8 16"></polyline><polyline points="16 8 20 12 16 16"></polyline></svg>문제</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20c.5-3 3-4.5 5.5-4.5S14 17 14.5 20"></path><path d="M16 5.5a3 3 0 010 5.8"></path></svg>응시자</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 12 9 6 13 18 15 12 21 12"></polyline></svg>모니터링</a>
+              
+            </nav>
+            <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:10.5px;color:var(--text-3);">v0.9 · MVP</div>
+          </aside>
+          <!--MAIN-->
+          <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+            <header style="height:60px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--surface);">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);">현재 시험</span>
+                <div style="display:flex;align-items:center;gap:8px;height:36px;padding:0 13px;border:1px solid var(--border);border-radius:9px;background:var(--surface);font-size:13px;font-weight:500;">2026 백엔드 개발자 코딩테스트 <span style="color:var(--text-3);">▾</span></div>
+                <span style="font-size:12px;color:var(--text-2);"><strong style="color:var(--text);">3</strong> 문제 · <strong style="color:var(--text);">12</strong> 참가자</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);"><span style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--surface-3);font-size:11px;font-weight:600;color:var(--text);">김</span>김검토 · admin</span>
+                <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border);color:var(--text-2);font-size:14px;">☾</span>
+                <button style="height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;">로그아웃</button>
+              </div>
+            </header>
+            <div style="flex:1;overflow:auto;padding:26px 28px;min-height:0;">
+              <p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Overview</p>
+              <h1 style="margin:0 0 22px;font-size:22px;font-weight:700;letter-spacing:-.01em;">대시보드</h1>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;">
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:18px;"><p style="margin:0 0 8px;font-size:11.5px;color:var(--text-2);">출제 문제</p><p style="margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em;">3</p></div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:18px;"><p style="margin:0 0 8px;font-size:11.5px;color:var(--text-2);">초대 참가자</p><p style="margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em;">12</p></div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:18px;"><p style="margin:0 0 8px;font-size:11.5px;color:var(--text-2);">응시 중</p><p style="margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--accent);">4</p></div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:18px;"><p style="margin:0 0 8px;font-size:11.5px;color:var(--text-2);">고위험 신호</p><p style="margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--high);">2</p></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:16px;margin-bottom:20px;">
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);"><h2 style="margin:0;font-size:13.5px;font-weight:700;">검토가 필요한 응시자</h2><span style="font-size:11px;color:var(--text-3);">위험 높은 순</span></div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--border);"><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;">candidate_20260007</span><div style="display:flex;align-items:center;gap:12px;"><span style="display:inline-flex;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;background:var(--high-soft);color:var(--high);">82</span><span style="font-size:11.5px;color:var(--accent);">근거 →</span></div></div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--border);"><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;">candidate_20260002</span><div style="display:flex;align-items:center;gap:12px;"><span style="display:inline-flex;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;background:var(--med-soft);color:var(--med);">54</span><span style="font-size:11.5px;color:var(--accent);">근거 →</span></div></div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 18px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;">candidate_20260001</span><div style="display:flex;align-items:center;gap:12px;"><span style="display:inline-flex;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;background:var(--low-soft);color:var(--low);">18</span><span style="font-size:11.5px;color:var(--accent);">근거 →</span></div></div>
+                </div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;">
+                  <div style="padding:14px 18px;border-bottom:1px solid var(--border);"><h2 style="margin:0;font-size:13.5px;font-weight:700;">최근 활동</h2></div>
+                  <div style="padding:16px 18px;display:flex;flex-direction:column;gap:15px;">
+                    <div style="display:flex;gap:11px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--low);margin-top:5px;flex:none;"></span><div><p style="margin:0;font-size:12.5px;">candidate_20260002 <span style="color:var(--text-2);">제출 완료</span></p><p style="margin:2px 0 0;font-size:11px;color:var(--text-3);">2분 전</p></div></div>
+                    <div style="display:flex;gap:11px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--high);margin-top:5px;flex:none;"></span><div><p style="margin:0;font-size:12.5px;">candidate_20260007 <span style="color:var(--text-2);">고위험 신호 감지</span></p><p style="margin:2px 0 0;font-size:11px;color:var(--text-3);">6분 전 · PASTE_BURST</p></div></div>
+                    <div style="display:flex;gap:11px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--text-3);margin-top:5px;flex:none;"></span><div><p style="margin:0;font-size:12.5px;">candidate_20260001 <span style="color:var(--text-2);">응시 종료</span></p><p style="margin:2px 0 0;font-size:11px;color:var(--text-3);">14분 전</p></div></div>
+                    <div style="display:flex;gap:11px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:5px;flex:none;"></span><div><p style="margin:0;font-size:12.5px;">candidate_20260009 <span style="color:var(--text-2);">초대 링크 발급</span></p><p style="margin:2px 0 0;font-size:11px;color:var(--text-3);">22분 전</p></div></div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;gap:11px;align-items:flex-start;border-left:3px solid var(--med);background:var(--med-soft);border-radius:10px;padding:14px 16px;">
+                <span style="width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--med);color:#fff;font-weight:700;font-size:13px;">!</span>
+                <p style="margin:0;font-size:13px;line-height:1.5;color:var(--text);"><strong>자동 탈락 금지.</strong> 탐지 점수만으로 응시자를 탈락시키지 않습니다. 신호별 근거와 시험 맥락을 사람이 검토해야 합니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 시험 설정 -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">시험 설정 · 생성/시간</p>
+        <div data-screen-label="관리자-시험설정" style="width:1180px;height:780px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;">
+          <aside style="width:214px;flex:none;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;">
+            <div style="display:flex;gap:11px;align-items:center;padding:18px;border-bottom:1px solid var(--border);">
+              <span style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:13px;">SR</span>
+              <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0;"><strong style="font-size:13px;font-weight:700;white-space:nowrap;">Session Review</strong><small style="font-size:10.5px;color:var(--text-3);white-space:nowrap;">근거 중심 검토 도구</small></span>
+            </div>
+            <nav style="flex:1;display:flex;flex-direction:column;gap:2px;padding:14px 11px;">
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>대시보드</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--primary);font-size:12.5px;font-weight:600;text-decoration:none;background:var(--primary-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2"></circle></svg>시험 설정</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 4 12 8 16"></polyline><polyline points="16 8 20 12 16 16"></polyline></svg>문제</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20c.5-3 3-4.5 5.5-4.5S14 17 14.5 20"></path><path d="M16 5.5a3 3 0 010 5.8"></path></svg>응시자</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 12 9 6 13 18 15 12 21 12"></polyline></svg>모니터링</a>
+              
+            </nav>
+            <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:10.5px;color:var(--text-3);">v0.9 · MVP</div>
+          </aside>
+          <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+            <header style="height:60px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--surface);">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);">현재 시험</span>
+                <div style="display:flex;align-items:center;gap:8px;height:36px;padding:0 13px;border:1px solid var(--border);border-radius:9px;background:var(--surface);font-size:13px;font-weight:500;">2026 백엔드 개발자 코딩테스트 <span style="color:var(--text-3);">▾</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);"><span style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--surface-3);font-size:11px;font-weight:600;color:var(--text);">김</span>김검토 · admin</span>
+                <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border);color:var(--text-2);font-size:14px;">☾</span>
+                <button style="height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;">로그아웃</button>
+              </div>
+            </header>
+            <div style="flex:1;overflow:auto;padding:26px 28px;min-height:0;">
+              <p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Assessment</p>
+              <h1 style="margin:0 0 4px;font-size:22px;font-weight:700;letter-spacing:-.01em;">시험 설정</h1>
+              <p style="margin:0 0 22px;font-size:13px;color:var(--text-2);">출제 묶음과 시험 시간을 정의합니다. 저장하면 출제·초대·모니터링이 이 시험으로 이어집니다.</p>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:22px;margin-bottom:18px;max-width:680px;">
+                <div style="display:flex;flex-direction:column;gap:16px;">
+                  <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">조직 ID</label><input value="org_acme" style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:0 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);box-sizing:border-box;" /></div>
+                  <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">시험 제목</label><input value="2026 백엔드 개발자 코딩테스트" style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:0 12px;font-family:inherit;font-size:13px;color:var(--text);box-sizing:border-box;" /></div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                    <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">시작 시간</label><input value="2026-06-21 09:00" style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:0 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);box-sizing:border-box;" /></div>
+                    <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">종료 시간</label><input value="2026-06-21 12:00" style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:0 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);box-sizing:border-box;" /></div>
+                  </div>
+                  <div style="display:flex;gap:10px;margin-top:4px;"><button style="height:40px;padding:0 18px;border:none;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">변경 저장</button><button style="height:40px;padding:0 16px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);color:var(--text);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;">새 시험 만들기</button></div>
+                </div>
+              </div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;max-width:680px;">
+                <div style="padding:13px 18px;border-bottom:1px solid var(--border);"><h2 style="margin:0;font-size:13px;font-weight:700;">내 시험 목록</h2></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);"><div><p style="margin:0;font-size:13px;font-weight:600;">2026 백엔드 개발자 코딩테스트</p><p style="margin:3px 0 0;font-size:11px;color:var(--text-3);">3 문제 · 12 참가자 · 09:00–12:00</p></div><span style="display:inline-flex;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;background:var(--low-soft);color:var(--low);">진행 중</span></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;"><div><p style="margin:0;font-size:13px;font-weight:600;color:var(--text-2);">2025 프론트엔드 채용</p><p style="margin:3px 0 0;font-size:11px;color:var(--text-3);">5 문제 · 41 참가자 · 종료됨</p></div><span style="display:inline-flex;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;background:var(--surface-3);color:var(--text-3);">보관됨</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- row 2: 문제 + 응시자 -->
+    <div style="display:flex;gap:44px;align-items:flex-start;margin-bottom:48px;">
+
+      <!-- 문제 -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">문제 · 출제 (시험 시작 전 · 편집 가능)</p>
+        <div data-screen-label="관리자-문제" style="width:1180px;height:820px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;">
+          <aside style="width:214px;flex:none;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;">
+            <div style="display:flex;gap:11px;align-items:center;padding:18px;border-bottom:1px solid var(--border);">
+              <span style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:13px;">SR</span>
+              <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0;"><strong style="font-size:13px;font-weight:700;white-space:nowrap;">Session Review</strong><small style="font-size:10.5px;color:var(--text-3);white-space:nowrap;">근거 중심 검토 도구</small></span>
+            </div>
+            <nav style="flex:1;display:flex;flex-direction:column;gap:2px;padding:14px 11px;">
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>대시보드</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2"></circle></svg>시험 설정</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--primary);font-size:12.5px;font-weight:600;text-decoration:none;background:var(--primary-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 4 12 8 16"></polyline><polyline points="16 8 20 12 16 16"></polyline></svg>문제</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20c.5-3 3-4.5 5.5-4.5S14 17 14.5 20"></path><path d="M16 5.5a3 3 0 010 5.8"></path></svg>응시자</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 12 9 6 13 18 15 12 21 12"></polyline></svg>모니터링</a>
+              
+            </nav>
+            <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:10.5px;color:var(--text-3);">v0.9 · MVP</div>
+          </aside>
+          <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+            <header style="height:60px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--surface);">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);">현재 시험</span>
+                <div style="display:flex;align-items:center;gap:8px;height:36px;padding:0 13px;border:1px solid var(--border);border-radius:9px;background:var(--surface);font-size:13px;font-weight:500;">2026 백엔드 개발자 코딩테스트 <span style="color:var(--text-3);">▾</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);"><span style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--surface-3);font-size:11px;font-weight:600;color:var(--text);">김</span>김검토 · admin</span>
+                <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border);color:var(--text-2);font-size:14px;">☾</span>
+                <button style="height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;">로그아웃</button>
+              </div>
+            </header>
+            <div style="flex:1;overflow:hidden;display:flex;min-height:0;">
+              <div style="width:280px;flex:none;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;"><h2 style="margin:0;font-size:13px;font-weight:700;">출제된 문제 3</h2><button style="height:28px;padding:0 10px;border-radius:7px;border:none;background:var(--primary);color:var(--primary-fg);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;">+ 추가</button></div>
+                <div style="padding:0 12px;display:flex;flex-direction:column;gap:4px;">
+                  <div style="padding:11px 13px;border-radius:9px;background:var(--primary-soft);"><p style="margin:0;font-size:13px;font-weight:600;color:var(--primary);">1. 두 수의 합</p><p style="margin:3px 0 0;font-size:11px;color:var(--text-2);">테스트 4 · 공개 2</p></div>
+                  <div style="padding:11px 13px;border-radius:9px;"><p style="margin:0;font-size:13px;font-weight:500;">2. 배열 정렬</p><p style="margin:3px 0 0;font-size:11px;color:var(--text-3);">테스트 6 · 공개 1</p></div>
+                  <div style="padding:11px 13px;border-radius:9px;"><p style="margin:0;font-size:13px;font-weight:500;">3. 최단 경로</p><p style="margin:3px 0 0;font-size:11px;color:var(--text-3);">테스트 8 · 공개 1</p></div>
+                </div>
+              </div>
+              <div style="flex:1;overflow:auto;padding:22px 24px;min-width:0;">
+                <p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Problem editor</p>
+                <div style="display:flex;align-items:center;gap:10px;margin:0 0 14px;"><h1 style="margin:0;font-size:20px;font-weight:700;">문제 출제</h1><span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--med-soft);color:var(--med);"><span style="width:6px;height:6px;border-radius:50%;background:var(--med);"></span>시작 전</span></div>
+                <div style="display:flex;gap:10px;align-items:flex-start;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:10px;padding:12px 15px;margin-bottom:18px;max-width:640px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg><p style="margin:0;font-size:12.5px;line-height:1.55;color:var(--text-2);">아직 시험이 시작되지 않아 출제·테스트 케이스를 자유롭게 수정할 수 있습니다. <strong style="color:var(--text);font-weight:600;">시험을 시작하면 출제 내용이 잠깁니다.</strong></p></div>
+                <div style="display:flex;flex-direction:column;gap:15px;max-width:640px;">
+                  <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">문제 제목</label><input value="두 수의 합" style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:0 12px;font-family:inherit;font-size:13px;color:var(--text);box-sizing:border-box;" /></div>
+                  <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">문제 설명</label><textarea style="width:100%;height:78px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:13px;color:var(--text);box-sizing:border-box;resize:vertical;line-height:1.5;">두 정수 A와 B를 입력받아 A+B를 출력하는 프로그램을 작성하세요.</textarea></div>
+                  <div style="display:flex;flex-direction:column;gap:8px;">
+                    <label style="font-size:11px;font-weight:600;color:var(--text-2);">허용 언어</label>
+                    <div style="display:flex;gap:9px;flex-wrap:wrap;">
+                      <span style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 13px;border:1px solid var(--primary);background:var(--primary-soft);border-radius:8px;font-size:12.5px;font-weight:600;color:var(--primary);"><span style="width:15px;height:15px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:var(--primary);color:#fff;font-size:10px;">✓</span>Python 3.12</span>
+                      <span style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 13px;border:1px solid var(--border);border-radius:8px;font-size:12.5px;color:var(--text-2);"><span style="width:15px;height:15px;border:1.5px solid var(--border-strong);border-radius:4px;"></span>JavaScript ES2022</span>
+                      <span style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 13px;border:1px solid var(--border);border-radius:8px;font-size:12.5px;color:var(--text-2);"><span style="width:15px;height:15px;border:1.5px solid var(--border-strong);border-radius:4px;"></span>C++20</span>
+                      <span style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 13px;border:1px solid var(--border);border-radius:8px;font-size:12.5px;color:var(--text-2);"><span style="width:15px;height:15px;border:1.5px solid var(--border-strong);border-radius:4px;"></span>Java 21</span>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:380px;">
+                    <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">시간 제한 (ms)</label><input value="2000" style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:0 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);box-sizing:border-box;" /></div>
+                    <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">메모리 (MB)</label><input value="128" style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:0 12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);box-sizing:border-box;" /></div>
+                  </div>
+                  <div style="border:1px solid var(--border);background:var(--surface-2);border-radius:11px;padding:14px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><strong style="font-size:13px;">테스트 1</strong><label style="display:flex;gap:7px;align-items:center;font-size:11.5px;color:var(--text-2);"><span style="width:15px;height:15px;border:1.5px solid var(--border-strong);border-radius:4px;"></span>숨은 케이스</label></div>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                      <input value="3 5" placeholder="stdin" style="width:100%;height:36px;border:1px solid var(--border);background:var(--surface);border-radius:8px;padding:0 11px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text);box-sizing:border-box;" />
+                      <input value="8" placeholder="expected stdout" style="width:100%;height:36px;border:1px solid var(--border);background:var(--surface);border-radius:8px;padding:0 11px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text);box-sizing:border-box;" />
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:10px;"><button style="height:40px;padding:0 14px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);color:var(--text);font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer;">+ 테스트 케이스</button><button style="height:40px;padding:0 18px;border:none;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">문제 저장</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 문제 (잠김) -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">문제 · 시험 시작 후 (잠김 · 읽기 전용)</p>
+        <div data-screen-label="관리자-문제-잠김" style="width:1180px;height:820px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;">
+          <aside style="width:214px;flex:none;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;">
+            <div style="display:flex;gap:11px;align-items:center;padding:18px;border-bottom:1px solid var(--border);">
+              <span style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:13px;">SR</span>
+              <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0;"><strong style="font-size:13px;font-weight:700;white-space:nowrap;">Session Review</strong><small style="font-size:10.5px;color:var(--text-3);white-space:nowrap;">근거 중심 검토 도구</small></span>
+            </div>
+            <nav style="flex:1;display:flex;flex-direction:column;gap:2px;padding:14px 11px;">
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>대시보드</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2"></circle></svg>시험 설정</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--primary);font-size:12.5px;font-weight:600;text-decoration:none;background:var(--primary-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 4 12 8 16"></polyline><polyline points="16 8 20 12 16 16"></polyline></svg>문제</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20c.5-3 3-4.5 5.5-4.5S14 17 14.5 20"></path><path d="M16 5.5a3 3 0 010 5.8"></path></svg>응시자</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 12 9 6 13 18 15 12 21 12"></polyline></svg>모니터링</a>
+            </nav>
+            <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:10.5px;color:var(--text-3);">v0.9 · MVP</div>
+          </aside>
+          <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+            <header style="height:60px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--surface);">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);">현재 시험</span>
+                <div style="display:flex;align-items:center;gap:8px;height:36px;padding:0 13px;border:1px solid var(--border);border-radius:9px;background:var(--surface);font-size:13px;font-weight:500;">2026 백엔드 개발자 코딩테스트 <span style="color:var(--text-3);">▾</span></div>
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--low-soft);color:var(--low);"><span style="width:6px;height:6px;border-radius:50%;background:var(--low);"></span>진행 중</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);"><span style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--surface-3);font-size:11px;font-weight:600;color:var(--text);">김</span>김검토 · admin</span>
+                <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border);color:var(--text-2);font-size:14px;">☾</span>
+                <button style="height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;">로그아웃</button>
+              </div>
+            </header>
+            <div style="flex:1;overflow:hidden;display:flex;min-height:0;">
+              <div style="width:280px;flex:none;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;"><h2 style="margin:0;font-size:13px;font-weight:700;">출제된 문제 3</h2><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text-3);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>잠김</span></div>
+                <div style="padding:0 12px;display:flex;flex-direction:column;gap:4px;">
+                  <div style="padding:11px 13px;border-radius:9px;background:var(--primary-soft);"><p style="margin:0;font-size:13px;font-weight:600;color:var(--primary);">1. 두 수의 합</p><p style="margin:3px 0 0;font-size:11px;color:var(--text-2);">테스트 4 · 공개 2</p></div>
+                  <div style="padding:11px 13px;border-radius:9px;"><p style="margin:0;font-size:13px;font-weight:500;">2. 배열 정렬</p><p style="margin:3px 0 0;font-size:11px;color:var(--text-3);">테스트 6 · 공개 1</p></div>
+                  <div style="padding:11px 13px;border-radius:9px;"><p style="margin:0;font-size:13px;font-weight:500;">3. 최단 경로</p><p style="margin:3px 0 0;font-size:11px;color:var(--text-3);">테스트 8 · 공개 1</p></div>
+                </div>
+              </div>
+              <div style="flex:1;overflow:auto;padding:22px 24px;min-width:0;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                  <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Problem · read only</p>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;"><h1 style="margin:0;font-size:20px;font-weight:700;">문제 출제</h1><span style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:var(--high-soft);color:var(--high);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>잠김</span></div>
+                <div style="display:flex;gap:11px;align-items:flex-start;border-left:3px solid var(--high);background:var(--high-soft);border-radius:10px;padding:13px 16px;margin-bottom:20px;max-width:640px;">
+                  <span style="width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--high);color:#fff;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></span>
+                  <p style="margin:0;font-size:12.5px;line-height:1.55;color:var(--text);"><strong>시험이 시작되어 출제 내용이 잠겼습니다.</strong> 무결성 보장을 위해 문제·언어·테스트 케이스는 시험 종료 전까지 수정할 수 없습니다.</p>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:15px;max-width:640px;opacity:.7;pointer-events:none;">
+                  <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">문제 제목</label><div style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface-2);border-radius:9px;padding:0 12px;display:flex;align-items:center;font-size:13px;color:var(--text);box-sizing:border-box;">두 수의 합</div></div>
+                  <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">문제 설명</label><div style="width:100%;min-height:60px;border:1px solid var(--border);background:var(--surface-2);border-radius:9px;padding:10px 12px;font-size:13px;color:var(--text);box-sizing:border-box;line-height:1.5;">두 정수 A와 B를 입력받아 A+B를 출력하는 프로그램을 작성하세요.</div></div>
+                  <div style="display:flex;flex-direction:column;gap:8px;">
+                    <label style="font-size:11px;font-weight:600;color:var(--text-2);">허용 언어</label>
+                    <div style="display:flex;gap:9px;flex-wrap:wrap;">
+                      <span style="display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 13px;border:1px solid var(--border);background:var(--surface-2);border-radius:8px;font-size:12.5px;font-weight:600;color:var(--text);"><span style="width:15px;height:15px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:var(--text-3);color:#fff;font-size:10px;">✓</span>Python 3.12</span>
+                    </div>
+                  </div>
+                  <div style="border:1px solid var(--border);background:var(--surface-2);border-radius:11px;padding:14px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><strong style="font-size:13px;">테스트 1</strong><span style="font-size:11px;color:var(--text-3);">공개 케이스</span></div>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                      <div style="width:100%;height:36px;border:1px solid var(--border);background:var(--surface);border-radius:8px;padding:0 11px;display:flex;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text);box-sizing:border-box;">3 5</div>
+                      <div style="width:100%;height:36px;border:1px solid var(--border);background:var(--surface);border-radius:8px;padding:0 11px;display:flex;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text);box-sizing:border-box;">8</div>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:10px;margin-top:18px;max-width:640px;">
+                  <button disabled style="height:40px;padding:0 14px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--text-3);font-family:inherit;font-size:12.5px;font-weight:500;cursor:not-allowed;display:flex;align-items:center;gap:7px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>+ 테스트 케이스</button>
+                  <button disabled style="height:40px;padding:0 18px;border:none;border-radius:9px;background:var(--surface-3);color:var(--text-3);font-family:inherit;font-size:13px;font-weight:600;cursor:not-allowed;">문제 저장 (잠김)</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 응시자 -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">응시자 · 초대/링크</p>
+        <div data-screen-label="관리자-응시자" style="width:1180px;height:820px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;">
+          <aside style="width:214px;flex:none;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;">
+            <div style="display:flex;gap:11px;align-items:center;padding:18px;border-bottom:1px solid var(--border);">
+              <span style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:13px;">SR</span>
+              <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0;"><strong style="font-size:13px;font-weight:700;white-space:nowrap;">Session Review</strong><small style="font-size:10.5px;color:var(--text-3);white-space:nowrap;">근거 중심 검토 도구</small></span>
+            </div>
+            <nav style="flex:1;display:flex;flex-direction:column;gap:2px;padding:14px 11px;">
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>대시보드</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2"></circle></svg>시험 설정</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 4 12 8 16"></polyline><polyline points="16 8 20 12 16 16"></polyline></svg>문제</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--primary);font-size:12.5px;font-weight:600;text-decoration:none;background:var(--primary-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20c.5-3 3-4.5 5.5-4.5S14 17 14.5 20"></path><path d="M16 5.5a3 3 0 010 5.8"></path></svg>응시자</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 12 9 6 13 18 15 12 21 12"></polyline></svg>모니터링</a>
+              
+            </nav>
+            <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:10.5px;color:var(--text-3);">v0.9 · MVP</div>
+          </aside>
+          <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+            <header style="height:60px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--surface);">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);">현재 시험</span>
+                <div style="display:flex;align-items:center;gap:8px;height:36px;padding:0 13px;border:1px solid var(--border);border-radius:9px;background:var(--surface);font-size:13px;font-weight:500;">2026 백엔드 개발자 코딩테스트 <span style="color:var(--text-3);">▾</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);"><span style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--surface-3);font-size:11px;font-weight:600;color:var(--text);">김</span>김검토 · admin</span>
+                <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border);color:var(--text-2);font-size:14px;">☾</span>
+                <button style="height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;">로그아웃</button>
+              </div>
+            </header>
+            <div style="flex:1;overflow:auto;padding:26px 28px;min-height:0;">
+              <p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Candidates</p>
+              <h1 style="margin:0 0 18px;font-size:22px;font-weight:700;">응시자 초대</h1>
+              <div style="display:flex;gap:18px;align-items:flex-start;">
+                <div style="width:360px;flex:none;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:20px;">
+                  <h2 style="margin:0 0 14px;font-size:13px;font-weight:700;">1회용 인증 링크 생성</h2>
+                  <div style="display:flex;flex-direction:column;gap:14px;">
+                    <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">응시자 ID</label><input value="candidate_20260013" style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:0 12px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text);box-sizing:border-box;" /></div>
+                    <div style="display:flex;flex-direction:column;gap:7px;"><label style="font-size:11px;font-weight:600;color:var(--text-2);">만료 시간</label><input value="2026-06-21 18:00" style="width:100%;height:40px;border:1px solid var(--border);background:var(--surface);border-radius:9px;padding:0 12px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text);box-sizing:border-box;" /></div>
+                    <div style="border-left:2px solid var(--accent);background:var(--surface-2);border-radius:8px;padding:11px 13px;"><p style="margin:0 0 5px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2);">식별 기준</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.6;color:var(--text-2);">candidate_id = 사람<br>링크 교환 시 session_id 생성</p></div>
+                    <button style="height:42px;border:none;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">초대 링크 생성</button>
+                  </div>
+                </div>
+                <div style="flex:1;min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);"><h2 style="margin:0;font-size:13px;font-weight:700;">초대된 응시자 12</h2><span style="font-size:11px;color:var(--text-3);">최근 발급 순</span></div>
+                  <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr auto;gap:10px;padding:9px 18px;background:var(--surface-2);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);"><span>응시자</span><span>상태</span><span>발급</span><span></span></div>
+                  <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr auto;gap:10px;padding:12px 18px;border-bottom:1px solid var(--border);align-items:center;font-size:12.5px;"><span style="font-family:'IBM Plex Mono',monospace;">candidate_20260001</span><span style="color:var(--text-2);">응시 종료</span><span style="color:var(--text-3);font-size:11.5px;">09:02</span><span style="font-size:11.5px;color:var(--accent);">복사</span></div>
+                  <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr auto;gap:10px;padding:12px 18px;border-bottom:1px solid var(--border);align-items:center;font-size:12.5px;"><span style="font-family:'IBM Plex Mono',monospace;">candidate_20260002</span><span style="color:var(--low);">응시 중</span><span style="color:var(--text-3);font-size:11.5px;">09:03</span><span style="font-size:11.5px;color:var(--accent);">복사</span></div>
+                  <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr auto;gap:10px;padding:12px 18px;border-bottom:1px solid var(--border);align-items:center;font-size:12.5px;"><span style="font-family:'IBM Plex Mono',monospace;">candidate_20260007</span><span style="color:var(--low);">응시 중</span><span style="color:var(--text-3);font-size:11.5px;">09:05</span><span style="font-size:11.5px;color:var(--accent);">복사</span></div>
+                  <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr auto;gap:10px;padding:12px 18px;align-items:center;font-size:12.5px;"><span style="font-family:'IBM Plex Mono',monospace;">candidate_20260009</span><span style="color:var(--text-3);">초대됨</span><span style="color:var(--text-3);font-size:11.5px;">09:41</span><span style="font-size:11.5px;color:var(--accent);">복사</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- row 3: 모니터링 + 근거 -->
+    <div style="display:flex;gap:44px;align-items:flex-start;">
+
+      <!-- 모니터링 -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">모니터링 · 실시간 위험</p>
+        <div data-screen-label="관리자-모니터링" style="width:1180px;height:780px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;">
+          <aside style="width:214px;flex:none;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;">
+            <div style="display:flex;gap:11px;align-items:center;padding:18px;border-bottom:1px solid var(--border);">
+              <span style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:13px;">SR</span>
+              <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0;"><strong style="font-size:13px;font-weight:700;white-space:nowrap;">Session Review</strong><small style="font-size:10.5px;color:var(--text-3);white-space:nowrap;">근거 중심 검토 도구</small></span>
+            </div>
+            <nav style="flex:1;display:flex;flex-direction:column;gap:2px;padding:14px 11px;">
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>대시보드</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2"></circle></svg>시험 설정</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 4 12 8 16"></polyline><polyline points="16 8 20 12 16 16"></polyline></svg>문제</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20c.5-3 3-4.5 5.5-4.5S14 17 14.5 20"></path><path d="M16 5.5a3 3 0 010 5.8"></path></svg>응시자</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--primary);font-size:12.5px;font-weight:600;text-decoration:none;background:var(--primary-soft);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 12 9 6 13 18 15 12 21 12"></polyline></svg>모니터링</a>
+              
+            </nav>
+            <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:10.5px;color:var(--text-3);">v0.9 · MVP</div>
+          </aside>
+          <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+            <header style="height:60px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--surface);">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);">현재 시험</span>
+                <div style="display:flex;align-items:center;gap:8px;height:36px;padding:0 13px;border:1px solid var(--border);border-radius:9px;background:var(--surface);font-size:13px;font-weight:500;">2026 백엔드 개발자 코딩테스트 <span style="color:var(--text-3);">▾</span></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);"><span style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--surface-3);font-size:11px;font-weight:600;color:var(--text);">김</span>김검토 · admin</span>
+                <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border);color:var(--text-2);font-size:14px;">☾</span>
+                <button style="height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;">로그아웃</button>
+              </div>
+            </header>
+            <div style="flex:1;overflow:auto;padding:26px 28px;min-height:0;">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;">
+                <div><p style="margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Live monitor</p><h1 style="margin:0 0 5px;font-size:22px;font-weight:700;">참가자 모니터링</h1><p style="margin:0;font-size:12px;color:var(--text-2);">참가자 행을 클릭하면 해당 응시자의 <strong style="color:var(--text);font-weight:600;">근거 상세</strong>로 이동합니다.</p></div>
+                <div style="display:flex;align-items:center;gap:12px;"><span style="display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text-2);"><span style="width:7px;height:7px;border-radius:50%;background:var(--low);"></span>10초마다 자동 새로고침</span><button style="height:32px;padding:0 13px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;">고위험만</button></div>
+              </div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;">
+                <div style="display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) 64px minmax(0,1fr) 56px;gap:10px;padding:11px 20px;background:var(--surface-2);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);"><span>응시자</span><span>상태</span><span>진행</span><span>위험 점수</span><span></span></div>
+                <div style="display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) 64px minmax(0,1fr) 56px;gap:10px;align-items:center;padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--border);background:var(--high-soft);font-size:13px;"><span style="font-family:'IBM Plex Mono',monospace;">candidate_20260007</span><span style="color:var(--low);">응시 중</span><span style="color:var(--text-2);font-size:12px;">2/3</span><span style="display:flex;align-items:center;gap:9px;min-width:0;"><span style="display:inline-flex;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--high-soft);color:var(--high);border:1px solid var(--high);">82</span><span style="flex:1;height:5px;border-radius:3px;background:var(--surface-3);overflow:hidden;max-width:70px;"><span style="display:block;width:82%;height:100%;background:var(--high);"></span></span></span><span style="font-size:11.5px;color:var(--accent);">근거 →</span></div>
+                <div style="display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) 64px minmax(0,1fr) 56px;gap:10px;align-items:center;padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--border);font-size:13px;"><span style="font-family:'IBM Plex Mono',monospace;">candidate_20260002</span><span style="color:var(--text-2);">제출 완료</span><span style="color:var(--text-2);font-size:12px;">3/3</span><span style="display:flex;align-items:center;gap:9px;min-width:0;"><span style="display:inline-flex;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--med-soft);color:var(--med);">54</span><span style="flex:1;height:5px;border-radius:3px;background:var(--surface-3);overflow:hidden;max-width:70px;"><span style="display:block;width:54%;height:100%;background:var(--med);"></span></span></span><span style="font-size:11.5px;color:var(--accent);">근거 →</span></div>
+                <div style="display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) 64px minmax(0,1fr) 56px;gap:10px;align-items:center;padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--border);font-size:13px;"><span style="font-family:'IBM Plex Mono',monospace;">candidate_20260001</span><span style="color:var(--text-2);">응시 종료</span><span style="color:var(--text-2);font-size:12px;">3/3</span><span style="display:flex;align-items:center;gap:9px;min-width:0;"><span style="display:inline-flex;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--low-soft);color:var(--low);">18</span><span style="flex:1;height:5px;border-radius:3px;background:var(--surface-3);overflow:hidden;max-width:70px;"><span style="display:block;width:18%;height:100%;background:var(--low);"></span></span></span><span style="font-size:11.5px;color:var(--accent);">근거 →</span></div>
+                <div style="display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) 64px minmax(0,1fr) 56px;gap:10px;align-items:center;padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--border);font-size:13px;"><span style="font-family:'IBM Plex Mono',monospace;">candidate_20260005</span><span style="color:var(--low);">응시 중</span><span style="color:var(--text-2);font-size:12px;">1/3</span><span style="display:flex;align-items:center;gap:9px;min-width:0;"><span style="display:inline-flex;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--low-soft);color:var(--low);">9</span><span style="flex:1;height:5px;border-radius:3px;background:var(--surface-3);overflow:hidden;max-width:70px;"><span style="display:block;width:9%;height:100%;background:var(--low);"></span></span></span><span style="font-size:11.5px;color:var(--accent);">근거 →</span></div>
+                <div style="display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) 64px minmax(0,1fr) 56px;gap:10px;align-items:center;padding:14px 20px;cursor:pointer;font-size:13px;"><span style="font-family:'IBM Plex Mono',monospace;">candidate_20260009</span><span style="color:var(--text-3);">초대됨</span><span style="color:var(--text-3);font-size:12px;">0/3</span><span style="color:var(--text-3);">—</span><span></span></div>
+              </div>
+              <p style="margin:14px 2px 0;font-size:11.5px;color:var(--text-3);">위험 점수 높은 순 · 12/12명 표시 중</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 근거 -->
+      <div style="flex:none;">
+        <p style="margin:0 0 11px 2px;font-size:12px;font-weight:600;color:var(--cap);letter-spacing:.02em;">근거 · 위험 평가 상세</p>
+        <div data-screen-label="관리자-근거" style="width:1180px;height:780px;border-radius:7px;overflow:hidden;background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 24px 60px rgba(20,30,48,.12);display:flex;">
+          <aside style="width:214px;flex:none;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;">
+            <div style="display:flex;gap:11px;align-items:center;padding:18px;border-bottom:1px solid var(--border);">
+              <span style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:13px;">SR</span>
+              <span style="display:flex;flex-direction:column;line-height:1.3;min-width:0;"><strong style="font-size:13px;font-weight:700;white-space:nowrap;">Session Review</strong><small style="font-size:10.5px;color:var(--text-3);white-space:nowrap;">근거 중심 검토 도구</small></span>
+            </div>
+            <nav style="flex:1;display:flex;flex-direction:column;gap:2px;padding:14px 11px;">
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>대시보드</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><circle cx="9" cy="7" r="2.2"></circle><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="17" r="2.2"></circle></svg>시험 설정</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 4 12 8 16"></polyline><polyline points="16 8 20 12 16 16"></polyline></svg>문제</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"></circle><path d="M3.5 20c.5-3 3-4.5 5.5-4.5S14 17 14.5 20"></path><path d="M16 5.5a3 3 0 010 5.8"></path></svg>응시자</a>
+              <a style="display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:var(--text-2);font-size:12.5px;font-weight:500;text-decoration:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 12 7 12 9 6 13 18 15 12 21 12"></polyline></svg>모니터링</a>
+              
+            </nav>
+            <div style="padding:14px 18px;border-top:1px solid var(--border);font-size:10.5px;color:var(--text-3);">v0.9 · MVP</div>
+          </aside>
+          <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+            <header style="height:60px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--surface);">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:11.5px;color:var(--accent);white-space:nowrap;">← 모니터링</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);">candidate_20260007</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);"><span style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--surface-3);font-size:11px;font-weight:600;color:var(--text);">김</span>김검토 · admin</span>
+                <span style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border);color:var(--text-2);font-size:14px;">☾</span>
+                <button style="height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-family:inherit;font-size:12px;cursor:pointer;">로그아웃</button>
+              </div>
+            </header>
+            <div style="flex:1;overflow:auto;padding:26px 28px;min-height:0;">
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:22px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px;">
+                <div>
+                  <p style="margin:0 0 10px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);">Risk assessment</p>
+                  <h2 style="margin:0 0 14px;font-size:19px;font-weight:700;">위험 평가</h2>
+                  <div style="display:flex;gap:28px;">
+                    <div><p style="margin:0 0 3px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">세션</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:13px;">sess_8f2a1c</p></div>
+                    <div><p style="margin:0 0 3px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">모델 버전</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:13px;">v2.3.1</p></div>
+                    <div><p style="margin:0 0 3px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">평가 ID</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:13px;">ra_77c2</p></div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+                  <span style="display:inline-flex;padding:3px 12px;border-radius:999px;font-size:12px;font-weight:700;background:var(--high-soft);color:var(--high);">높음</span>
+                  <strong style="font-size:42px;font-weight:700;letter-spacing:-.03em;line-height:1;">82<small style="font-size:17px;font-weight:500;color:var(--text-3);">/100</small></strong>
+                  <span style="font-size:11.5px;color:var(--text-2);">사람의 검토 권장</span>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;">
+                <div><p style="margin:0 0 3px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);">Evidence ledger</p><h2 style="margin:0;font-size:15px;font-weight:700;">신호별 근거</h2></div>
+                <span style="font-size:11.5px;color:var(--text-3);">2개 신호</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;">
+                  <div style="display:flex;gap:13px;align-items:flex-start;padding:16px 20px;border-bottom:1px solid var(--border);">
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--text-3);">01</span>
+                    <div style="flex:1;"><h3 style="margin:0;font-size:14px;font-weight:700;">붙여넣기 급증</h3><p style="margin:3px 0 5px;font-size:12px;color:var(--text-2);">짧은 시간에 대량의 코드가 붙여넣기로 입력됨</p><code style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);">PASTE_BURST</code></div>
+                    <span style="display:inline-flex;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--high-soft);color:var(--high);">88 / 100</span>
+                  </div>
+                  <div style="padding:16px 20px;display:flex;flex-direction:column;gap:14px;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+                      <div><p style="margin:0 0 4px;font-size:11px;color:var(--text-2);">붙여넣기 횟수</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;">17</p></div>
+                      <div><p style="margin:0 0 4px;font-size:11px;color:var(--text-2);">최대 길이</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;">1,204자</p></div>
+                      <div><p style="margin:0 0 4px;font-size:11px;color:var(--text-2);">총 시간</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;">3.2s</p></div>
+                    </div>
+                    <div style="border:1px solid var(--border);background:var(--surface-2);border-radius:10px;padding:12px 15px;">
+                      <p style="margin:0 0 8px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2);">임계값</p>
+                      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;"><div><p style="margin:0 0 3px;font-size:11px;color:var(--text-2);">횟수 임계</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:13px;">5</p></div><div><p style="margin:0 0 3px;font-size:11px;color:var(--text-2);">길이 임계</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:13px;">500</p></div></div>
+                    </div>
+                  </div>
+                </div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;">
+                  <div style="display:flex;gap:13px;align-items:flex-start;padding:16px 20px;border-bottom:1px solid var(--border);">
+                    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--text-3);">02</span>
+                    <div style="flex:1;"><h3 style="margin:0;font-size:14px;font-weight:700;">포커스 이탈</h3><p style="margin:3px 0 5px;font-size:12px;color:var(--text-2);">응시 중 탭/창 전환이 반복적으로 감지됨</p><code style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--text-3);">FOCUS_LOSS</code></div>
+                    <span style="display:inline-flex;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--med-soft);color:var(--med);">46 / 100</span>
+                  </div>
+                  <div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+                    <div><p style="margin:0 0 4px;font-size:11px;color:var(--text-2);">이탈 횟수</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;">6</p></div>
+                    <div><p style="margin:0 0 4px;font-size:11px;color:var(--text-2);">최장 이탈</p><p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;">42s</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;theme&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;light&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;tsType&quot;:&quot;'light'|'dark'&quot;},
+  &quot;accent&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;teal&quot;,&quot;options&quot;:[&quot;teal&quot;,&quot;blue&quot;,&quot;violet&quot;],&quot;tsType&quot;:&quot;'teal'|'blue'|'violet'&quot;}
+}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      theme: this.props.theme || 'light',
+      accent: this.props.accent || 'teal',
+    };
+  }
+}
+</script>
+</body>
+</html>
