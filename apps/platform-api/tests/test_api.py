@@ -27,7 +27,8 @@ def client(repository: InMemoryPlatformRepository) -> TestClient:
 
 @pytest.fixture
 def assessment(client: TestClient) -> dict:
-    starts_at = datetime.now(timezone.utc)
+    # 출제는 시작 전(draft)에만 가능하므로 시작 시각을 미래로 둔다.
+    starts_at = datetime.now(timezone.utc) + timedelta(minutes=5)
     response = client.post(
         "/assessments",
         json={
@@ -185,7 +186,7 @@ def _make_two_problem_assessment(
     repository: InMemoryPlatformRepository,
 ) -> tuple[TestClient, str, list[str]]:
     judged_client = TestClient(create_app(repository, judge_client=_AllPassJudge()))
-    starts_at = datetime.now(timezone.utc)
+    starts_at = datetime.now(timezone.utc) + timedelta(minutes=5)
     assessment = judged_client.post(
         "/assessments",
         json={
@@ -265,7 +266,7 @@ def test_below_threshold_submission_keeps_next_problem_locked(
             )
 
     client = TestClient(create_app(repository, judge_client=_HalfJudge()))
-    starts_at = datetime.now(timezone.utc)
+    starts_at = datetime.now(timezone.utc) + timedelta(minutes=5)
     assessment = client.post(
         "/assessments",
         json={
@@ -324,6 +325,94 @@ def test_problem_requires_existing_assessment(client: TestClient) -> None:
     )
 
     assert response.status_code == 404
+
+
+def _create_assessment(client: TestClient, *, starts_in: timedelta) -> dict:
+    starts_at = datetime.now(timezone.utc) + starts_in
+    response = client.post(
+        "/assessments",
+        json={
+            "organization_id": "org_1",
+            "title": "Lifecycle",
+            "starts_at": starts_at.isoformat(),
+            "ends_at": (starts_at + timedelta(hours=2)).isoformat(),
+        },
+    )
+    assert response.status_code == 201
+    return response.json()
+
+
+def test_assessment_status_is_derived_from_schedule(client: TestClient) -> None:
+    draft = _create_assessment(client, starts_in=timedelta(minutes=5))
+    live = _create_assessment(client, starts_in=timedelta(hours=-1))
+    archived = _create_assessment(client, starts_in=timedelta(hours=-3))
+
+    assert draft["status"] == "draft"
+    assert live["status"] == "live"
+    assert archived["status"] == "archived"
+
+    listed = {item["id"]: item["status"] for item in client.get("/assessments").json()}
+    assert listed[draft["id"]] == "draft"
+    assert listed[live["id"]] == "live"
+    assert listed[archived["id"]] == "archived"
+
+
+def test_problem_can_be_edited_before_exam_starts(
+    client: TestClient, problem: dict
+) -> None:
+    response = client.patch(
+        f"/problems/{problem['id']}",
+        json={"title": "A + B (개정)", "time_limit_ms": 1500},
+    )
+
+    assert response.status_code == 200
+    updated = response.json()
+    assert updated["title"] == "A + B (개정)"
+    assert updated["time_limit_ms"] == 1500
+    # 손대지 않은 필드는 보존된다.
+    assert updated["memory_limit_mb"] == problem["memory_limit_mb"]
+    assert len(updated["test_cases"]) == len(problem["test_cases"])
+
+
+def test_problem_creation_is_blocked_on_live_assessment(client: TestClient) -> None:
+    live = _create_assessment(client, starts_in=timedelta(hours=-1))
+
+    response = client.post(
+        "/problems",
+        json={
+            "assessment_id": live["id"],
+            "title": "Locked",
+            "statement": "잠긴 시험",
+            "allowed_languages": ["python"],
+            "test_cases": [{"stdin": "", "expected_stdout": "", "hidden": True}],
+        },
+    )
+
+    assert response.status_code == 409
+
+
+def test_problem_edit_is_blocked_after_exam_starts(
+    client: TestClient,
+    repository: InMemoryPlatformRepository,
+    problem: dict,
+) -> None:
+    # 문제는 시작 전(draft) 시험에 만들어졌다. 시험을 시작 상태로 옮기면 잠긴다.
+    stored = repository.get_assessment(problem["assessment_id"])
+    now = datetime.now(timezone.utc)
+    repository.create_assessment(
+        stored.model_copy(
+            update={"starts_at": now - timedelta(hours=1), "ends_at": now + timedelta(hours=1)}
+        )
+    )
+
+    response = client.patch(
+        f"/problems/{problem['id']}",
+        json={"title": "수정 시도"},
+    )
+
+    assert response.status_code == 409
+    # 원본은 그대로 유지된다.
+    assert repository.get_problem(problem["id"]).title == problem["title"]
 
 
 def test_ingest_event_batches_in_sequence(

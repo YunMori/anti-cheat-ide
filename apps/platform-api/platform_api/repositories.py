@@ -49,6 +49,8 @@ class PlatformRepository(Protocol):
 
     def create_problem(self, problem: Problem) -> Problem: ...
 
+    def update_problem(self, problem: Problem) -> Problem: ...
+
     def get_problem(self, problem_id: str) -> Problem | None: ...
 
     def list_problems(self, assessment_id: str | None = None) -> list[Problem]: ...
@@ -187,6 +189,11 @@ class InMemoryPlatformRepository:
             return [deepcopy(item) for item in self._assessments.values()]
 
     def create_problem(self, problem: Problem) -> Problem:
+        with self._lock:
+            self._problems[problem.id] = deepcopy(problem)
+            return deepcopy(problem)
+
+    def update_problem(self, problem: Problem) -> Problem:
         with self._lock:
             self._problems[problem.id] = deepcopy(problem)
             return deepcopy(problem)
