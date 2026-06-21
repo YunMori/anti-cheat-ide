@@ -1,4 +1,4 @@
-.PHONY: test test-ai test-backend test-platform test-judge test-detection test-integration test-docker-runtime lint-frontend lint-admin build-frontend build-admin docker-prepull dev-services dev-judge
+.PHONY: test test-ai test-backend test-platform test-judge test-detection test-integration test-docker-runtime lint-frontend lint-admin build-frontend build-admin analyze-frontend analyze-admin docker-prepull dev-services dev-judge
 
 test: test-ai test-backend test-platform test-judge test-detection test-integration lint-frontend lint-admin
 
@@ -41,6 +41,13 @@ build-frontend:
 
 build-admin:
 	cd apps/admin-web && npm run build
+
+# Bundle analysis: launches Turbopack's interactive bundle analyzer UI.
+analyze-frontend:
+	cd frontend && npm run analyze
+
+analyze-admin:
+	cd apps/admin-web && npm run analyze
 
 dev-services:
 	docker compose up --build platform-api detection-service

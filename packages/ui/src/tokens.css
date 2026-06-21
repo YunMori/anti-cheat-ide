@@ -1,0 +1,113 @@
+/*
+ * Shared design tokens for the anti-cheat IDE platform.
+ * Imported by each app's globals.css after `@import "tailwindcss"`.
+ *
+ * Semantic tokens map to runtime CSS variables so light/dark themes swap by
+ * toggling the `.dark` class on <html> (see @ide/ui ThemeProvider).
+ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-accent: var(--accent);
+
+  --color-risk-low: var(--risk-low);
+  --color-risk-low-soft: var(--risk-low-soft);
+  --color-risk-medium: var(--risk-medium);
+  --color-risk-medium-soft: var(--risk-medium-soft);
+  --color-risk-high: var(--risk-high);
+  --color-risk-high-soft: var(--risk-high-soft);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-sans-stack);
+  --font-mono: var(--font-mono-stack);
+
+  --shadow-card: var(--shadow-card-value);
+}
+
+:root {
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --surface-2: #eef2f7;
+  --text: #182132;
+  --muted: #5b6678;
+  --border: #d8dee9;
+
+  --primary: #183a63;
+  --primary-hover: #214a7c;
+  --primary-fg: #ffffff;
+  --accent: #0e7490;
+
+  --risk-low: #1c7a4a;
+  --risk-low-soft: #eaf6f0;
+  --risk-medium: #9a6300;
+  --risk-medium-soft: #fff5df;
+  --risk-high: #b3261e;
+  --risk-high-soft: #fff0ef;
+
+  --success: #1c7a4a;
+  --warning: #9a6300;
+  --danger: #b3261e;
+  --ring: #e49332;
+
+  --font-sans-stack: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+  --font-mono-stack: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+  --shadow-card-value: 0 18px 55px rgba(38, 52, 73, 0.08);
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0b0e14;
+  --surface: #151a23;
+  --surface-2: #1d242f;
+  --text: #e6e9ef;
+  --muted: #9aa4b2;
+  --border: #2a323d;
+
+  --primary: #22d3ee;
+  --primary-hover: #38dcf2;
+  --primary-fg: #06212a;
+  --accent: #22d3ee;
+
+  --risk-low: #4ade80;
+  --risk-low-soft: #10271b;
+  --risk-medium: #fbbf24;
+  --risk-medium-soft: #2a2310;
+  --risk-high: #f87171;
+  --risk-high-soft: #2a1414;
+
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --ring: #22d3ee;
+
+  --shadow-card-value: 0 18px 55px rgba(0, 0, 0, 0.45);
+
+  color-scheme: dark;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
