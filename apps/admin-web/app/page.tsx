@@ -2,47 +2,23 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  Button,
-  Card,
-  Field,
-  Input,
-  StateCard,
-  ThemeToggle,
-} from "@ide/ui";
-import { ManagementDesk } from "./management-desk";
-
-type AdminUser = {
-  id: string;
-  email: string;
-  display_name: string;
-  role: "admin" | "reviewer" | null;
-  status: "pending" | "active";
-};
-
-type AuthState =
-  | { status: "loading" }
-  | { status: "anonymous" }
-  | { status: "authenticated"; user: AdminUser };
+import { useRouter } from "next/navigation";
+import { Button, Card, Field, Input, StateCard, ThemeToggle } from "@ide/ui";
+import { useAdminAuth } from "../lib/auth";
+import type { AdminUser } from "../lib/types";
 
 export default function Home() {
-  const [auth, setAuth] = useState<AuthState>({ status: "loading" });
+  const { auth, logout } = useAdminAuth();
+  const router = useRouter();
+
+  const authedWithRole =
+    auth.status === "authenticated" && Boolean(auth.user.role);
 
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((response) =>
-        response.ok
-          ? response.json()
-          : Promise.reject(new Error("not authenticated")),
-      )
-      .then((user: AdminUser) => setAuth({ status: "authenticated", user }))
-      .catch(() => setAuth({ status: "anonymous" }));
-  }, []);
-
-  async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    setAuth({ status: "anonymous" });
-  }
+    if (authedWithRole) {
+      router.replace("/exams");
+    }
+  }, [authedWithRole, router]);
 
   return (
     <main className="mx-auto w-[min(1180px,calc(100%-2rem))] pb-20">
@@ -63,66 +39,44 @@ export default function Home() {
             <small className="text-xs text-muted">근거 중심 검토 도구</small>
           </span>
         </Link>
-        <div className="flex items-center gap-3">
-          <span className="hidden text-xs text-muted sm:inline">
-            {auth.status === "authenticated"
-              ? `${auth.user.display_name} · ${auth.user.role}`
-              : "관리자 전용 · MVP"}
-          </span>
-          <ThemeToggle />
-        </div>
+        <ThemeToggle />
       </header>
 
       {auth.status === "loading" && (
-        <StateCard tone="loading" title="관리자 인증을 확인하는 중입니다" description="잠시만 기다려 주세요." />
-      )}
-      {auth.status === "anonymous" && (
-        <AuthPanel
-          onAuthenticated={(user) => setAuth({ status: "authenticated", user })}
+        <StateCard
+          tone="loading"
+          title="관리자 인증을 확인하는 중입니다"
+          description="잠시만 기다려 주세요."
         />
       )}
 
-      {auth.status === "authenticated" && auth.user.role && (
-        <>
-          <div className="mb-4 flex justify-end">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => void handleLogout()}
-            >
-              로그아웃
-            </Button>
-          </div>
+      {auth.status === "anonymous" && <AuthPanel />}
 
-          <ManagementDesk role={auth.user.role} />
+      {authedWithRole && (
+        <StateCard
+          tone="loading"
+          title="시험 관리로 이동 중입니다"
+          description="잠시만 기다려 주세요."
+        />
+      )}
 
-          <aside
-            className="mt-8 flex items-start gap-3 rounded-xl border-l-4 border-warning bg-risk-medium-soft p-4"
-            aria-label="검토 정책"
-          >
-            <span
-              className="flex size-6 shrink-0 items-center justify-center rounded-full bg-warning font-bold text-white"
-              aria-hidden="true"
-            >
-              !
-            </span>
-            <p className="text-sm text-text">
-              <strong className="mr-1 font-bold">자동 탈락 금지.</strong>
-              탐지 점수만으로 응시자를 탈락시키지 않습니다. 신호별 근거와 시험
-              맥락을 사람이 검토해야 합니다.
-            </p>
-          </aside>
-        </>
+      {auth.status === "authenticated" && !auth.user.role && (
+        <section className="mx-auto max-w-md space-y-4 text-center">
+          <StateCard
+            tone="empty"
+            title="승인 대기 중입니다"
+            description="기존 관리자가 계정을 승인하면 시험 관리에 접근할 수 있습니다."
+          />
+          <Button variant="secondary" size="sm" onClick={() => void logout()}>
+            로그아웃
+          </Button>
+        </section>
       )}
     </main>
   );
 }
 
-function AuthPanel({
-  onAuthenticated,
-}: {
-  onAuthenticated: (user: AdminUser) => void;
-}) {
+function AuthPanel() {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
@@ -134,10 +88,7 @@ function AuthPanel({
     const form = new FormData(event.currentTarget);
     const payload =
       mode === "login"
-        ? {
-            email: form.get("email"),
-            password: form.get("password"),
-          }
+        ? { email: form.get("email"), password: form.get("password") }
         : {
             email: form.get("email"),
             password: form.get("password"),
@@ -159,11 +110,12 @@ function AuthPanel({
         );
       }
       if (mode === "login") {
-        onAuthenticated(body as AdminUser);
+        // useAdminAuth가 /api/auth/me로 다시 확인하도록 새로고침.
+        window.location.assign("/exams");
         return;
       }
       setNotice(
-        body.status === "active"
+        (body as AdminUser).status === "active"
           ? "첫 관리자 계정이 생성되었습니다. 이제 로그인하세요."
           : "가입 요청이 접수되었습니다. 기존 관리자의 승인을 기다리세요.",
       );

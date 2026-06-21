@@ -11,41 +11,53 @@ from ..dependencies import (
     new_id,
     require_role,
 )
-from ..models import AdminUserRecord, Assessment, AssessmentCreate
+from ..models import (
+    AdminUserRecord,
+    Assessment,
+    AssessmentCreate,
+    AssessmentSummary,
+    assessment_status,
+)
 
 router = APIRouter(tags=["assessments"])
 
 
+def _with_status(assessment: Assessment) -> AssessmentSummary:
+    return AssessmentSummary(
+        **assessment.model_dump(), status=assessment_status(assessment)
+    )
+
+
 @router.post(
     "/assessments",
-    response_model=Assessment,
+    response_model=AssessmentSummary,
     status_code=status.HTTP_201_CREATED,
 )
 def create_assessment(
     payload: AssessmentCreate,
     repository: RepositoryDependency,
     current_user: Annotated[AdminUserRecord | None, Depends(require_role("admin"))],
-) -> Assessment:
+) -> AssessmentSummary:
     del current_user
     assessment = Assessment(id=new_id("asm"), **payload.model_dump())
-    return repository.create_assessment(assessment)
+    return _with_status(repository.create_assessment(assessment))
 
 
-@router.get("/assessments", response_model=list[Assessment])
+@router.get("/assessments", response_model=list[AssessmentSummary])
 def list_assessments(
     repository: RepositoryDependency,
     current_user: CurrentAdmin,
-) -> list[Assessment]:
+) -> list[AssessmentSummary]:
     del current_user
-    return repository.list_assessments()
+    return [_with_status(item) for item in repository.list_assessments()]
 
 
-@router.get("/assessments/{assessment_id}", response_model=Assessment)
+@router.get("/assessments/{assessment_id}", response_model=AssessmentSummary)
 def get_assessment(
     assessment_id: str,
     repository: RepositoryDependency,
     current_user: CurrentAdmin,
-) -> Assessment:
+) -> AssessmentSummary:
     del current_user
     assessment = repository.get_assessment(assessment_id)
     if assessment is None:
@@ -53,4 +65,4 @@ def get_assessment(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="assessment not found",
         )
-    return assessment
+    return _with_status(assessment)

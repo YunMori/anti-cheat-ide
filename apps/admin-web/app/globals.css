@@ -4,6 +4,12 @@
 /* Scan the shared UI package so its utility classes are generated. */
 @source "../../../packages/ui/src";
 
+/* 핸드오프 지정 폰트: 본문 IBM Plex Sans KR, 코드·수치 IBM Plex Mono. */
+:root {
+  --font-sans-stack: "IBM Plex Sans KR", "Segoe UI", system-ui, sans-serif;
+  --font-mono-stack: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
 html {
   background: var(--bg);
 }
