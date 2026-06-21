@@ -80,6 +80,31 @@ class Assessment(AssessmentCreate):
     id: str
 
 
+AssessmentStatus = Literal["draft", "live", "archived"]
+
+
+def assessment_status(
+    assessment: Assessment, now: datetime | None = None
+) -> AssessmentStatus:
+    """시험 일정으로부터 상태를 파생한다.
+
+    시작 전(draft)에는 출제를 자유롭게 편집할 수 있고, 시작 후(live)·종료
+    후(archived)에는 출제가 잠긴다. 별도 상태 컬럼 없이 일정만으로 계산한다.
+    """
+    current = now or utc_now()
+    if current < assessment.starts_at:
+        return "draft"
+    if current > assessment.ends_at:
+        return "archived"
+    return "live"
+
+
+class AssessmentSummary(Assessment):
+    """관리자 응답용 — 일정에서 파생한 상태를 포함한다."""
+
+    status: AssessmentStatus
+
+
 SupportedLanguage = Literal["python", "javascript", "cpp", "java"]
 ProblemProgressStatus = Literal["locked", "unlocked", "solved"]
 
@@ -132,6 +157,21 @@ class Problem(StrictModel):
     pass_threshold: float = 1.0
     order_index: int = 0
     test_cases: list[TestCase]
+
+
+class ProblemUpdate(StrictModel):
+    """문제 부분 수정(시작 전 시험에서만 허용). 제공된 필드만 갱신한다."""
+
+    title: str | None = Field(default=None, min_length=1)
+    statement: str | None = Field(default=None, min_length=1)
+    allowed_languages: list[SupportedLanguage] | None = Field(
+        default=None, min_length=1
+    )
+    starter_code: dict[SupportedLanguage, str] | None = None
+    time_limit_ms: int | None = Field(default=None, gt=0, le=30_000)
+    memory_limit_mb: int | None = Field(default=None, ge=16, le=1024)
+    pass_threshold: float | None = Field(default=None, ge=0, le=1)
+    test_cases: list[TestCaseCreate] | None = Field(default=None, min_length=1)
 
 
 class CandidateProblem(StrictModel):

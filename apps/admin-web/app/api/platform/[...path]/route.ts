@@ -17,6 +17,10 @@ export async function POST(request: Request, context: RouteContext) {
   return proxy(request, context);
 }
 
+export async function PATCH(request: Request, context: RouteContext) {
+  return proxy(request, context);
+}
+
 async function proxy(request: Request, context: RouteContext) {
   const token = await getAdminToken();
   if (!token) {
